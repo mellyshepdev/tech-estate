@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>One Room Prototype</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      overflow: hidden;
+      background: #111;
+      font-family: sans-serif;
+    }
+
+    #start {
+      position: fixed;
+      z-index: 2;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: #222;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    #message {
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      padding: 12px 18px;
+      color: white;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="start">Click to enter the room</div>
+  <div id="message">You found the first room's object.</div>
+
+  <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js";
+    import { PointerLockControls } from
+      "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/controls/PointerLockControls.js";
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x9bb7c9);
+
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      innerWidth / innerHeight,
+      0.1,
+      100
+    );
+
+    camera.position.set(0, 1.7, 6);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(devicePixelRatio);
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new PointerLockControls(camera, document.body);
+    const start = document.getElementById("start");
+    const message = document.getElementById("message");
+
+    start.addEventListener("click", () => {
+      controls.lock();
+    });
+
+    controls.addEventListener("lock", () => {
+      start.style.display = "none";
+    });
+
+    controls.addEventListener("unlock", () => {
+      start.style.display = "grid";
+    });
+
+    // Lighting
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x555555, 2));
+
+    const light = new THREE.PointLight(0xffffff, 80, 30);
+    light.position.set(0, 3.5, 0);
+    scene.add(light);
+
+    // Materials
+    const floorMaterial = new THREE.MeshStandardMaterial({
+      color: 0x76583d
+    });
+
+    const wallMaterial = new THREE.MeshStandardMaterial({
+      color: 0xd8c4a8
+    });
+
+    // Floor
+    const floor = new THREE.Mesh(
+      new THREE.BoxGeometry(12, 0.2, 12),
+      floorMaterial
+    );
+    floor.position.y = -0.1;
+    scene.add(floor);
+
+    // Ceiling
+    const ceiling = new THREE.Mesh(
+      new THREE.BoxGeometry(12, 0.2, 12),
+      wallMaterial
+    );
+    ceiling.position.y = 5;
+    scene.add(ceiling);
+
+    function wall(x, y, z, width, height, depth) {
+      const object = new THREE.Mesh(
+        new THREE.BoxGeometry(width, height, depth),
+        wallMaterial
+      );
+
+      object.position.set(x, y, z);
+      scene.add(object);
+    }
+
+    // Four walls
+    wall(0, 2.5, -6, 12, 5, 0.2);
+    wall(0, 2.5, 6, 12, 5, 0.2);
+    wall(-6, 2.5, 0, 0.2, 5, 12);
+    wall(6, 2.5, 0, 0.2, 5, 12);
+
+    // A simple table
+    const table = new THREE.Mesh(
+      new THREE.BoxGeometry(2.5, 0.2, 1.2),
+      new THREE.MeshStandardMaterial({ color: 0x4a2d1b })
+    );
+
+    table.position.set(0, 1.2, -2);
+    scene.add(table);
+
+    // The first interactive object
+    const object = new THREE.Mesh(
+      new THREE.BoxGeometry(0.6, 0.6, 0.6),
+      new THREE.MeshStandardMaterial({ color: 0x3366ff })
+    );
+
+    object.position.set(0, 1.6, -2);
+    scene.add(object);
+
+    // Movement
+    const keys = {};
+    const speed = 0.08;
+
+    addEventListener("keydown", event => {
+      keys[event.code] = true;
+    });
+
+    addEventListener("keyup", event => {
+      keys[event.code] = false;
+    });
+
+    // Interaction
+    addEventListener("keydown", event => {
+      if (event.code !== "KeyE" || !controls.isLocked) return;
+
+      const distance = camera.position.distanceTo(object.position);
+
+      if (distance < 2.5) {
+        message.style.display = "block";
+        message.textContent = "This will eventually open the room's agent.";
+      }
+    });
+
+    function move() {
+      if (!controls.isLocked) return;
+
+      if (keys["KeyW"]) controls.moveForward(speed);
+      if (keys["KeyS"]) controls.moveForward(-speed);
+      if (keys["KeyA"]) controls.moveRight(-speed);
+      if (keys["KeyD"]) controls.moveRight(speed);
+
+      // Keep the player inside the room
+      camera.position.x = THREE.MathUtils.clamp(camera.position.x, -5.3, 5.3);
+      camera.position.z = THREE.MathUtils.clamp(camera.position.z, -5.3, 5.3);
+      camera.position.y = 1.7;
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      move();
+      renderer.render(scene, camera);
+    }
+
+    addEventListener("resize", () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    animate();
+  </script>
+</body>
+</html>
