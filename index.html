@@ -1,0 +1,747 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tech Estate & Grand Mansion Garage</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #0a0a0c;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+    }
+
+    #start {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background: radial-gradient(circle at center, #1e2638 0%, #0a0c10 100%);
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-align: center;
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+    }
+
+    #start-box {
+      padding: 40px 60px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      background: rgba(15, 20, 30, 0.7);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    #start-box:hover {
+      transform: scale(1.03);
+      border-color: #4f46e5;
+    }
+
+    #start-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #start-sub {
+      font-size: 16px;
+      color: #94a3b8;
+    }
+
+    #crosshair {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      margin-left: -4px;
+      margin-top: -4px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 5;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    }
+
+    #prompt {
+      position: fixed;
+      z-index: 5;
+      left: 50%;
+      bottom: 40px;
+      transform: translateX(-50%);
+      padding: 14px 28px;
+      color: #f8fafc;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      border-radius: 30px;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      display: none;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      pointer-events: none;
+    }
+
+    #prompt-key {
+      display: inline-block;
+      background: #6366f1;
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="start">
+    <div id="start-box">
+      <div id="start-title">TECH ESTATE</div>
+      <div id="start-sub">Click anywhere to explore the Foyer, Staggered Hallway & Mansion Garage</div>
+    </div>
+  </div>
+
+  <div id="crosshair"></div>
+  <div id="prompt"><span id="prompt-key">E</span> <span id="prompt-text">Open Door</span></div>
+
+  <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js";
+    import { PointerLockControls } from "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/controls/PointerLockControls.js";
+
+    // --- Scene Setup ---
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0d14);
+    scene.fog = new THREE.FogExp2(0x0a0d14, 0.012);
+
+    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 300);
+    camera.position.set(0, 1.7, 5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new PointerLockControls(camera, document.body);
+    const start = document.getElementById("start");
+    const promptEl = document.getElementById("prompt");
+    const promptTextEl = document.getElementById("prompt-text");
+
+    start.addEventListener("click", () => {
+      controls.lock();
+    });
+
+    controls.addEventListener("lock", () => {
+      start.style.display = "none";
+    });
+
+    controls.addEventListener("unlock", () => {
+      start.style.display = "grid";
+    });
+
+    // --- Ambient & Lighting ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    // Foyer Chandelier / Center Light
+    const foyerLight = new THREE.PointLight(0xffecd1, 120, 30);
+    foyerLight.position.set(0, 7, 0);
+    foyerLight.castShadow = true;
+    scene.add(foyerLight);
+
+    // Decorative Chandelier Geometry
+    const chandelierGroup = new THREE.Group();
+    chandelierGroup.position.set(0, 7.5, 0);
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.2 });
+    const ringGeo = new THREE.TorusGeometry(2, 0.08, 16, 32);
+    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringMesh.rotation.x = Math.PI / 2;
+    chandelierGroup.add(ringMesh);
+
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2;
+      const bulbGeo = new THREE.SphereGeometry(0.15, 16, 16);
+      const bulbMat = new THREE.MeshBasicMaterial({ color: 0xfff4d6 });
+      const bulb = new THREE.Mesh(bulbGeo, bulbMat);
+      bulb.position.set(Math.cos(angle) * 2, -0.2, Math.sin(angle) * 2);
+      chandelierGroup.add(bulb);
+    }
+    scene.add(chandelierGroup);
+
+    // --- Materials ---
+    const foyerFloorMat = new THREE.MeshStandardMaterial({
+      color: 0x221c18,
+      roughness: 0.3,
+      metalness: 0.1
+    });
+
+    const foyerWallMat = new THREE.MeshStandardMaterial({
+      color: 0x3d352e,
+      roughness: 0.7
+    });
+
+    const hallwayFloorMat = new THREE.MeshStandardMaterial({
+      color: 0x1f242d,
+      roughness: 0.4
+    });
+
+    const hallwayWallMat = new THREE.MeshStandardMaterial({
+      color: 0x333a48,
+      roughness: 0.6
+    });
+
+    const doorMat = new THREE.MeshStandardMaterial({
+      color: 0x5c3a21,
+      roughness: 0.4,
+      metalness: 0.2
+    });
+
+    const handleMat = new THREE.MeshStandardMaterial({
+      color: 0xd4af37,
+      metalness: 0.9,
+      roughness: 0.1
+    });
+
+    const tableWoodMat = new THREE.MeshStandardMaterial({
+      color: 0x2b1810,
+      roughness: 0.5
+    });
+
+    const feltMat = new THREE.MeshStandardMaterial({
+      color: 0x106b38,
+      roughness: 0.8
+    });
+
+    // --- Interactive Objects Array ---
+    const interactiveDoors = [];
+
+    // Helper for adding walls
+    function createWall(x, y, z, w, h, d, material = foyerWallMat) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
+      mesh.position.set(x, y, z);
+      mesh.receiveShadow = true;
+      mesh.castShadow = true;
+      scene.add(mesh);
+      return mesh;
+    }
+
+    // ==========================================
+    // 1. CENTRAL FOYER (Playing Area & Games)
+    // ==========================================
+    // Dimensions: X [-15, 15], Z [-15, 15], Height 8
+    const foyerFloor = new THREE.Mesh(new THREE.BoxGeometry(30, 0.2, 30), foyerFloorMat);
+    foyerFloor.position.set(0, -0.1, 0);
+    scene.add(foyerFloor);
+
+    const foyerCeiling = new THREE.Mesh(new THREE.BoxGeometry(30, 0.2, 30), foyerWallMat);
+    foyerCeiling.position.set(0, 8, 0);
+    scene.add(foyerCeiling);
+
+    // Foyer Outer Walls
+    // Front door opening in the south wall.
+    createWall(-8.5, 4, 15, 13, 8, 0.4);
+    createWall(8.5, 4, 15, 13, 8, 0.4);
+    createWall(0, 7, 15, 4, 2, 0.4);
+    createWall(-15, 4, 0, 0.4, 8, 30); // West wall
+    createWall(15, 4, 0, 0.4, 8, 30);  // East wall
+
+    // North wall with hallway opening (Opening width = 8 from X=-4 to 4)
+    createWall(-9.5, 4, -15, 11, 8, 0.4);
+    createWall(9.5, 4, -15, 11, 8, 0.4);
+    createWall(0, 7, -15, 8, 2, 0.4); // Arch top above opening
+
+    // --- Custom Card Game Table (Center of Foyer) ---
+    const centerTableGroup = new THREE.Group();
+    centerTableGroup.position.set(0, 0, 2);
+
+    // Oval Card Table
+    const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.5, 0.2, 32), feltMat);
+    tableTop.position.y = 1.0;
+    tableTop.scale.set(1.4, 1, 1); // Oval shape
+    centerTableGroup.add(tableTop);
+
+    const tableBase = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 1.2, 1.0, 16), tableWoodMat);
+    tableBase.position.y = 0.5;
+    centerTableGroup.add(tableBase);
+
+    // Playing Cards spread on table
+    const cardGeo = new THREE.BoxGeometry(0.25, 0.01, 0.35);
+    const cardColors = [0xffffff, 0xd90429, 0xffffff, 0x111111];
+    for (let i = 0; i < 12; i++) {
+      const cardMat = new THREE.MeshBasicMaterial({ color: cardColors[i % cardColors.length] });
+      const card = new THREE.Mesh(cardGeo, cardMat);
+      const angle = (i / 12) * Math.PI * 2;
+      card.position.set(Math.cos(angle) * 2.2, 1.11, Math.sin(angle) * 1.5);
+      card.rotation.y = Math.random() * Math.PI;
+      centerTableGroup.add(card);
+    }
+
+    // Poker Chips / Game Tokens
+    for (let i = 0; i < 20; i++) {
+      const chipGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.04, 16);
+      const chipColors = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0xffffff];
+      const chipMat = new THREE.MeshStandardMaterial({ color: chipColors[i % chipColors.length] });
+      const chipStack = new THREE.Mesh(chipGeo, chipMat);
+      chipStack.position.set((Math.random() - 0.5) * 2.5, 1.12 + (i % 4) * 0.04, (Math.random() - 0.5) * 1.8);
+      centerTableGroup.add(chipStack);
+    }
+    scene.add(centerTableGroup);
+
+    // --- Side Game Table 1: Chess / Board Game Table (Left Side) ---
+    const chessTableGroup = new THREE.Group();
+    chessTableGroup.position.set(-8, 0, -5);
+    const cTableTop = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.15, 2.2), tableWoodMat);
+    cTableTop.position.y = 1.0;
+    chessTableGroup.add(cTableTop);
+    const cTableLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.4, 1.0, 16), tableWoodMat);
+    cTableLeg.position.y = 0.5;
+    chessTableGroup.add(cTableLeg);
+
+    // Chessboard surface
+    const boardMesh = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.02, 1.8), new THREE.MeshStandardMaterial({ color: 0xdedede, roughness: 0.3 }));
+    boardMesh.position.y = 1.08;
+    chessTableGroup.add(boardMesh);
+    scene.add(chessTableGroup);
+
+    // --- Side Game Table 2: Arcade / Retro Custom Game Station (Right Side) ---
+    const arcadeGroup = new THREE.Group();
+    arcadeGroup.position.set(8, 0, -5);
+    const arcadeBody = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.4, 1.2), new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.4 }));
+    arcadeBody.position.y = 1.2;
+    arcadeGroup.add(arcadeBody);
+    const arcadeScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.9), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
+    arcadeScreen.position.set(0, 1.6, 0.61);
+    arcadeGroup.add(arcadeScreen);
+    scene.add(arcadeGroup);
+
+    // --- Front Door and Staircase ---
+    const frontDoor = new THREE.Group();
+    frontDoor.position.set(0, 0, 14.8);
+    const frontDoorPanel = new THREE.Mesh(new THREE.BoxGeometry(4, 6, 0.2), doorMat);
+    frontDoorPanel.position.y = 3;
+    frontDoor.add(frontDoorPanel);
+    const frontDoorFrame = new THREE.Mesh(new THREE.BoxGeometry(4.6, 6.6, 0.25), handleMat);
+    frontDoorFrame.position.y = 3.3;
+    frontDoor.add(frontDoorFrame);
+    frontDoor.userData = { isDoor: true, name: "Front Door", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+    scene.add(frontDoor);
+    interactiveDoors.push(frontDoor);
+
+    const stairGroup = new THREE.Group();
+    stairGroup.position.set(9.5, 0, 4);
+    const stairMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.65 });
+    for (let i = 0; i < 10; i++) {
+      const step = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.35 + i * 0.03, 1.1), stairMat);
+      step.position.set(0, 0.2 + i * 0.35, 4 - i * 0.9);
+      stairGroup.add(step);
+    }
+    const upperLanding = new THREE.Mesh(new THREE.BoxGeometry(6, 0.35, 5), stairMat);
+    upperLanding.position.set(0, 3.7, -5);
+    stairGroup.add(upperLanding);
+    scene.add(stairGroup);
+
+
+    // ==========================================
+    // 2. V-SHAPED HALLWAY (18 Doors Per Wing)
+    // ==========================================
+    const wingLength = 72;
+    const wingWidth = 8;
+    const wingAngle = Math.PI / 7;
+    const wingStart = new THREE.Vector3(0, 0, -19);
+    const wingDirections = [
+      new THREE.Vector3(-Math.sin(wingAngle), 0, -Math.cos(wingAngle)),
+      new THREE.Vector3(Math.sin(wingAngle), 0, -Math.cos(wingAngle))
+    ];
+
+    function addWing(direction, side) {
+      const center = wingStart.clone().add(direction.clone().multiplyScalar(wingLength / 2));
+      const angle = Math.atan2(direction.x, -direction.z);
+      const floor = new THREE.Mesh(new THREE.BoxGeometry(wingWidth, 0.2, wingLength), hallwayFloorMat);
+      floor.position.copy(center);
+      floor.rotation.y = angle;
+      scene.add(floor);
+      const ceiling = new THREE.Mesh(new THREE.BoxGeometry(wingWidth, 0.2, wingLength), hallwayWallMat);
+      ceiling.position.set(center.x, 6, center.z);
+      ceiling.rotation.y = angle;
+      scene.add(ceiling);
+      const wallOffset = wingWidth / 2;
+      for (const offset of [-wallOffset, wallOffset]) {
+        const wall = new THREE.Mesh(new THREE.BoxGeometry(0.2, 6, wingLength), hallwayWallMat);
+        const wallPos = center.clone().add(new THREE.Vector3(Math.cos(angle) * offset, 3, Math.sin(angle) * offset));
+        wall.position.copy(wallPos);
+        wall.rotation.y = angle;
+        scene.add(wall);
+      }
+      for (let i = 0; i < 9; i++) {
+        const distance = 8 + i * 7.1;
+        const doorPos = wingStart.clone().add(direction.clone().multiplyScalar(distance));
+        const outward = side === "left"
+          ? new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle))
+          : new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
+        addHallwayDoor(doorPos.x + outward.x * (wallOffset - 0.05), doorPos.z + outward.z * (wallOffset - 0.05), side, i);
+        const secondPos = wingStart.clone().add(direction.clone().multiplyScalar(distance + 3.5));
+        addHallwayDoor(secondPos.x - outward.x * (wallOffset - 0.05), secondPos.z - outward.z * (wallOffset - 0.05), side, i + 9);
+      }
+      const light = new THREE.PointLight(0x818cf8, 30, 25);
+      light.position.set(center.x, 5.5, center.z);
+      scene.add(light);
+    }
+
+    function addHallwayDoor(x, z, side, doorIndex) {
+      const doorGroup = new THREE.Group();
+      doorGroup.position.set(x, 0, z);
+      doorGroup.rotation.y = side === "left" ? -wingAngle : wingAngle;
+
+      // Frame
+      const frameMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.5 });
+      const frameLeft = new THREE.Mesh(new THREE.BoxGeometry(0.15, 3.2, 0.15), frameMat);
+      frameLeft.position.set(0, 1.6, -0.9);
+      doorGroup.add(frameLeft);
+
+      const frameRight = new THREE.Mesh(new THREE.BoxGeometry(0.15, 3.2, 0.15), frameMat);
+      frameRight.position.set(0, 1.6, 0.9);
+      doorGroup.add(frameRight);
+
+      const frameTop = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.15, 1.95), frameMat);
+      frameTop.position.set(0, 3.2, 0);
+      doorGroup.add(frameTop);
+
+      // Door Panel
+      const panel = new THREE.Mesh(new THREE.BoxGeometry(0.1, 3.1, 1.7), doorMat);
+      panel.position.set(0, 1.55, 0);
+      doorGroup.add(panel);
+
+      // Handle
+      const handle = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), handleMat);
+      const handleOffset = side === 'left' ? 0.6 : -0.6;
+      handle.position.set(side === 'left' ? 0.12 : -0.12, 1.4, handleOffset);
+      doorGroup.add(handle);
+
+      // Door Label
+      const numberText = `Room ${doorIndex + 1}`;
+      doorGroup.userData = { isDoor: true, name: numberText, targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+
+      scene.add(doorGroup);
+      interactiveDoors.push(doorGroup);
+    }
+
+    addWing(wingDirections[0], "left");
+    addWing(wingDirections[1], "right");
+
+
+    // ==========================================
+    // 3. MANSION GARAGE (Grand 4x Scale Experience)
+    // ==========================================
+    // Positioned at end of hallway: Z = -105 to -185 (Length = 80)
+    // Width = 60 (X from -30 to 30)
+    // Height = 22 (Four times higher than normal rooms!)
+
+    const garageFloorMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      roughness: 0.1,  // High polish marble look
+      metalness: 0.6
+    });
+
+    const garageWallMat = new THREE.MeshStandardMaterial({
+      color: 0x1e293b,
+      roughness: 0.4
+    });
+
+    const garageFloor = new THREE.Mesh(new THREE.BoxGeometry(60, 0.2, 80), garageFloorMat);
+    garageFloor.position.set(0, -0.1, -145);
+    scene.add(garageFloor);
+
+    const garageCeiling = new THREE.Mesh(new THREE.BoxGeometry(60, 0.2, 80), garageWallMat);
+    garageCeiling.position.set(0, 22, -145);
+    scene.add(garageCeiling);
+
+    // Garage Walls
+    createWall(-30, 11, -145, 0.4, 22, 80, garageWallMat); // West Wall
+    createWall(30, 11, -145, 0.4, 22, 80, garageWallMat);  // East Wall
+    createWall(0, 11, -185, 60, 22, 0.4, garageWallMat);   // Back South Wall
+
+    // Front Garage Entrance Wall (Z = -105) connecting with hallway
+    createWall(-17, 11, -105, 26, 22, 0.4, garageWallMat);
+    createWall(17, 11, -105, 26, 22, 0.4, garageWallMat);
+    createWall(0, 16, -105, 8, 12, 0.4, garageWallMat); // Top arch above mansion doors
+
+    // --- Grand Mansion Double Doors at Hallway End / Garage Entrance ---
+    const mansionDoorGroup = new THREE.Group();
+    mansionDoorGroup.position.set(0, 0, -104.8);
+
+    const mDoorFrameMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.2 });
+    const mDoorPanelMat = new THREE.MeshStandardMaterial({ color: 0x111827, metalness: 0.8, roughness: 0.2 });
+
+    // Left Leaf
+    const leftLeaf = new THREE.Mesh(new THREE.BoxGeometry(3.8, 10, 0.2), mDoorPanelMat);
+    leftLeaf.position.set(-2, 5, 0);
+    mansionDoorGroup.add(leftLeaf);
+
+    // Right Leaf
+    const rightLeaf = new THREE.Mesh(new THREE.BoxGeometry(3.8, 10, 0.2), mDoorPanelMat);
+    rightLeaf.position.set(2, 5, 0);
+    mansionDoorGroup.add(rightLeaf);
+
+    // Gold Trim & Handles
+    const mHandleL = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.2, 16), mDoorFrameMat);
+    mHandleL.position.set(-0.3, 5, 0.18);
+    mansionDoorGroup.add(mHandleL);
+
+    const mHandleR = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.2, 16), mDoorFrameMat);
+    mHandleR.position.set(0.3, 5, 0.18);
+    mansionDoorGroup.add(mHandleR);
+
+    mansionDoorGroup.userData = { isDoor: true, isGarageDoor: true, name: "Grand Mansion Garage Door", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+    scene.add(mansionDoorGroup);
+    interactiveDoors.push(mansionDoorGroup);
+
+
+    // --- Grand Garage Architectural Features ---
+    // 1. Classical Mansion Columns / Pillars along West & East walls
+    const pillarGeo = new THREE.CylinderGeometry(1.2, 1.4, 22, 32);
+    const pillarMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
+
+    for (let z = -115; z >= -175; z -= 18) {
+      const pLeft = new THREE.Mesh(pillarGeo, pillarMat);
+      pLeft.position.set(-26, 11, z);
+      scene.add(pLeft);
+
+      const pRight = new THREE.Mesh(pillarGeo, pillarMat);
+      pRight.position.set(26, 11, z);
+      scene.add(pRight);
+    }
+
+    // 2. High-Tech Ceiling LED Grid & Showroom Spotlights
+    for (let z = -120; z >= -170; z -= 25) {
+      // High ceiling spotlights
+      const spotLightL = new THREE.PointLight(0x38bdf8, 200, 45);
+      spotLightL.position.set(-15, 20, z);
+      scene.add(spotLightL);
+
+      const spotLightR = new THREE.PointLight(0x818cf8, 200, 45);
+      spotLightR.position.set(15, 20, z);
+      scene.add(spotLightR);
+    }
+
+    // Overhead Neon Light Strip Bars across the garage ceiling
+    for (let z = -115; z >= -175; z -= 15) {
+      const stripGeo = new THREE.BoxGeometry(45, 0.2, 0.4);
+      const stripMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+      const strip = new THREE.Mesh(stripGeo, stripMat);
+      strip.position.set(0, 21.8, z);
+      scene.add(strip);
+    }
+
+    // 3. Exotic Supercar Models (3D Silhouettes in Garage Bays)
+    function createSupercar(x, z, rotationY, colorHex) {
+      const carGroup = new THREE.Group();
+      carGroup.position.set(x, 0, z);
+      carGroup.rotation.y = rotationY;
+
+      const bodyMat = new THREE.MeshStandardMaterial({ color: colorHex, metalness: 0.9, roughness: 0.1 });
+      const glassMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9, roughness: 0.05 });
+      const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.5 });
+
+      // Lower Sleek Body
+      const lowerBody = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.7, 5.2), bodyMat);
+      lowerBody.position.y = 0.5;
+      carGroup.add(lowerBody);
+
+      // Cabin / Roof
+      const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.6, 2.6), glassMat);
+      cabin.position.set(0, 1.0, -0.2);
+      carGroup.add(cabin);
+
+      // Wheels
+      const wheelGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.35, 24);
+      wheelGeo.rotateZ(Math.PI / 2);
+
+      const positions = [
+        [-1.25, 0.4, 1.6],
+        [1.25, 0.4, 1.6],
+        [-1.25, 0.4, -1.6],
+        [1.25, 0.4, -1.6]
+      ];
+
+      positions.forEach(pos => {
+        const wheel = new THREE.Mesh(wheelGeo, wheelMat);
+        wheel.position.set(...pos);
+        carGroup.add(wheel);
+      });
+
+      // Headlights glow
+      const headL = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.1), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      headL.position.set(-0.8, 0.6, 2.61);
+      carGroup.add(headL);
+
+      const headR = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.1), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      headR.position.set(0.8, 0.6, 2.61);
+      carGroup.add(headR);
+
+      scene.add(carGroup);
+    }
+
+    // Display Supercars in Garage Bays
+    createSupercar(-15, -135, Math.PI / 6, 0xd90429);  // Crimson Red Sports Car
+    createSupercar(15, -135, -Math.PI / 6, 0x0284c7); // Electric Blue Supercar
+    createSupercar(-15, -165, Math.PI / 6, 0x15803d);  // British Racing Green Supercar
+    createSupercar(15, -165, -Math.PI / 6, 0xeab308); // Gold / Yellow Hypercar
+
+    // 4. Back Garage Bay Door (Giant Automatic Roll-up Door)
+    const garageBayDoorGroup = new THREE.Group();
+    garageBayDoorGroup.position.set(0, 0, -184.8);
+
+    const bayDoorMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.3 });
+    const bayDoor = new THREE.Mesh(new THREE.BoxGeometry(24, 14, 0.3), bayDoorMat);
+    bayDoor.position.set(0, 7, 0);
+    garageBayDoorGroup.add(bayDoor);
+
+    // Metallic horizontal panel grooves
+    for (let y = 1.5; y <= 13; y += 1.5) {
+      const groove = new THREE.Mesh(new THREE.BoxGeometry(23.8, 0.08, 0.35), new THREE.MeshBasicMaterial({ color: 0x0f172a }));
+      groove.position.set(0, y, 0);
+      garageBayDoorGroup.add(groove);
+    }
+
+    garageBayDoorGroup.userData = { isDoor: true, isGarageDoor: true, name: "Mansion Garage Bay Door", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+    scene.add(garageBayDoorGroup);
+    interactiveDoors.push(garageBayDoorGroup);
+
+
+    // ==========================================
+    // 4. PLAYER MOVEMENT & SEAMLESS INTERACTION
+    // ==========================================
+    const keys = {};
+    const speed = 0.12;
+
+    addEventListener("keydown", event => {
+      keys[event.code] = true;
+    });
+
+    addEventListener("keyup", event => {
+      keys[event.code] = false;
+    });
+
+    // Interaction when pressing 'E'
+    addEventListener("keydown", event => {
+      if (event.code !== "KeyE" || !controls.isLocked) return;
+
+      const nearestDoor = getNearestInteractiveDoor();
+      if (nearestDoor) {
+        triggerSeamlessTransition(nearestDoor.userData.targetUrl);
+      }
+    });
+
+    function getNearestInteractiveDoor() {
+      let closestDoor = null;
+      let minDistance = 3.2; // Proximity threshold
+
+      const cameraPos = camera.position;
+
+      interactiveDoors.forEach(door => {
+        const doorPos = new THREE.Vector3();
+        door.getWorldPosition(doorPos);
+        const dist = cameraPos.distanceTo(doorPos);
+
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestDoor = door;
+        }
+      });
+
+      return closestDoor;
+    }
+
+    let isNavigating = false;
+    function triggerSeamlessTransition(url) {
+      if (isNavigating) return;
+      isNavigating = true;
+
+      // Seamless transition to the Diesel Tech GitLab Pages site.
+      window.location.href = url || "https://gbonds1.gitlab.io/diesel.tech/";
+    }
+
+    function checkInteractionPrompt() {
+      if (!controls.isLocked) {
+        promptEl.style.display = "none";
+        return;
+      }
+
+      const nearestDoor = getNearestInteractiveDoor();
+      if (nearestDoor) {
+        promptEl.style.display = "block";
+        promptTextEl.textContent = `Open ${nearestDoor.userData.name}`;
+      } else {
+        promptEl.style.display = "none";
+      }
+
+      // Seamless trigger if player walks directly through the Grand Mansion Garage threshold or Bay door threshold
+      const posZ = camera.position.z;
+      const posX = camera.position.x;
+
+      if ((posZ < -104.5 && posZ > -106.5 && Math.abs(posX) < 3.8) || (posZ < -183.5)) {
+        triggerSeamlessTransition("https://gbonds1.gitlab.io/diesel.tech/");
+      }
+    }
+
+    function move() {
+      if (!controls.isLocked) return;
+
+      if (keys["KeyW"]) controls.moveForward(speed);
+      if (keys["KeyS"]) controls.moveForward(-speed);
+      if (keys["KeyA"]) controls.moveRight(-speed);
+      if (keys["KeyD"]) controls.moveRight(speed);
+
+      // --- Dynamic Collision Bounds ---
+      // Allows seamless travel through Foyer -> Hallway -> Garage
+      const x = camera.position.x;
+      const z = camera.position.z;
+
+      camera.position.y = 1.7; // Fixed eye level
+
+      // 1. Foyer Zone: Z in [-14.5, 14.5], X in [-14.2, 14.2]
+      if (z > -14.5) {
+        camera.position.x = THREE.MathUtils.clamp(x, -14.2, 14.2);
+        camera.position.z = THREE.MathUtils.clamp(z, -14.5, 14.2);
+      }
+      // 2. Hallway Zone: Z in [-104.5, -14.5], X in [-3.6, 3.6]
+      else if (z <= -14.5 && z > -104.5) {
+        camera.position.x = THREE.MathUtils.clamp(x, -3.6, 3.6);
+      }
+      // 3. Grand Mansion Garage Zone: Z in [-184.2, -104.5], X in [-28.5, 28.5]
+      else if (z <= -104.5) {
+        camera.position.x = THREE.MathUtils.clamp(x, -28.5, 28.5);
+        camera.position.z = THREE.MathUtils.clamp(z, -184.2, -104.5);
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      move();
+      checkInteractionPrompt();
+      renderer.render(scene, camera);
+    }
+
+    addEventListener("resize", () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    animate();
+  </script>
+</body>
+</html>
