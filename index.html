@@ -388,7 +388,7 @@
 
       // Door Label
       const numberText = `Room ${doorIndex + 1}`;
-      doorGroup.userData = { isDoor: true, name: numberText, targetUrl: "https://diesel.tech" };
+      doorGroup.userData = { isDoor: true, name: numberText, targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
 
       scene.add(doorGroup);
       interactiveDoors.push(doorGroup);
@@ -467,7 +467,7 @@
     mHandleR.position.set(0.3, 5, 0.18);
     mansionDoorGroup.add(mHandleR);
 
-    mansionDoorGroup.userData = { isDoor: true, isGarageDoor: true, name: "Grand Mansion Garage Door", targetUrl: "https://diesel.tech" };
+    mansionDoorGroup.userData = { isDoor: true, isGarageDoor: true, name: "Grand Mansion Garage Door", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
     scene.add(mansionDoorGroup);
     interactiveDoors.push(mansionDoorGroup);
 
@@ -579,7 +579,7 @@
       garageBayDoorGroup.add(groove);
     }
 
-    garageBayDoorGroup.userData = { isDoor: true, isGarageDoor: true, name: "Mansion Garage Bay Door", targetUrl: "https://diesel.tech" };
+    garageBayDoorGroup.userData = { isDoor: true, isGarageDoor: true, name: "Mansion Garage Bay Door", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
     scene.add(garageBayDoorGroup);
     interactiveDoors.push(garageBayDoorGroup);
 
@@ -633,8 +633,8 @@
       if (isNavigating) return;
       isNavigating = true;
 
-      // Seamless transition to diesel.tech
-      window.location.href = url || "https://diesel.tech";
+      // Seamless transition to the Diesel Tech GitLab Pages site.
+      window.location.href = url || "https://gbonds1.gitlab.io/diesel.tech/";
     }
 
     function checkInteractionPrompt() {
@@ -656,7 +656,7 @@
       const posX = camera.position.x;
 
       if ((posZ < -104.5 && posZ > -106.5 && Math.abs(posX) < 3.8) || (posZ < -183.5)) {
-        triggerSeamlessTransition("https://diesel.tech");
+        triggerSeamlessTransition("https://gbonds1.gitlab.io/diesel.tech/");
       }
     }
 
