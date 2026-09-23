@@ -643,10 +643,23 @@ console.log(PuffBaseClub.getStatus());</div>
     // ==========================================
     // 1. UPPER LEVEL - MANSION FOYER & ROOMS
     // ==========================================
-    // Foyer Floor & Ceiling
-    const foyerFloor = new THREE.Mesh(new THREE.BoxGeometry(24, 0.2, 24), floorMat);
-    foyerFloor.position.set(0, -0.1, 0);
-    scene.add(foyerFloor);
+    // Foyer floor with stairwell opening (x: -2..2, z: -1.5..0.5)
+    const foyerSlabs = [
+      [0, -6.75, 24, 10.5],
+      [0, 6.25, 24, 11.5],
+      [-7, -0.5, 10, 2],
+      [7, -0.5, 10, 2],
+    ];
+    for (const [fx, fz, fw, fd] of foyerSlabs) {
+      const slab = new THREE.Mesh(new THREE.BoxGeometry(fw, 0.2, fd), floorMat);
+      slab.position.set(fx, -0.1, fz);
+      scene.add(slab);
+    }
+
+    // Stairwell guard rails — entry is the south face only
+    createWall(-2.1, 0.5, -0.5, 0.15, 1.0, 2.1, goldMat);
+    createWall(2.1, 0.5, -0.5, 0.15, 1.0, 2.1, goldMat);
+    createWall(0, 0.5, -1.55, 4.4, 1.0, 0.15, goldMat);
 
     const foyerCeiling = new THREE.Mesh(new THREE.BoxGeometry(24, 0.2, 24), wallMat);
     foyerCeiling.position.set(0, 8, 0);
@@ -688,6 +701,21 @@ console.log(PuffBaseClub.getStatus());</div>
     const hallwayFloor = new THREE.Mesh(new THREE.BoxGeometry(8, 0.2, 40), floorMat);
     hallwayFloor.position.set(0, -0.1, -32);
     scene.add(hallwayFloor);
+
+    // Hallway enclosure: side walls, ceiling, end wall, mouth lintel
+    createWall(-4.1, 4, -32, 0.4, 8, 40);
+    createWall(4.1, 4, -32, 0.4, 8, 40);
+    createWall(0, 4, -52, 8.6, 8, 0.4);
+    createWall(0, 6.5, -12, 8, 3, 0.4);
+    const hallwayCeiling = new THREE.Mesh(new THREE.BoxGeometry(8.6, 0.2, 40), wallMat);
+    hallwayCeiling.position.set(0, 8, -32);
+    scene.add(hallwayCeiling);
+
+    for (let z of [-18, -32, -46]) {
+      const hLight = new THREE.PointLight(0xd8b4fe, 50, 14);
+      hLight.position.set(0, 6.5, z);
+      scene.add(hLight);
+    }
 
     // Dedicated Rooms along Hallway
     function addRoom(x, z, title, url, colorHex = 0xa855f7) {
@@ -746,7 +774,10 @@ console.log(PuffBaseClub.getStatus());</div>
     createWall(-20, clubY + 3, -30, 0.4, 6, 40); // West
     createWall(20, clubY + 3, -30, 0.4, 6, 40);  // East
     createWall(0, clubY + 3, -50, 40, 6, 0.4);   // North (Back Wall)
-    createWall(0, clubY + 3, -10, 40, 6, 0.4);   // South
+    createWall(-11.1, clubY + 3, -10, 17.8, 6, 0.4);  // South, west of stair door
+    createWall(11.1, clubY + 3, -10, 17.8, 6, 0.4);   // South, east of stair door
+    createWall(-2.2, clubY + 3, -10, 0.3, 6, 0.6, goldMat); // Door posts
+    createWall(2.2, clubY + 3, -10, 0.3, 6, 0.6, goldMat);
 
     // Hypnotic Purple Lights in Club
     for (let x of [-10, 10]) {
@@ -939,9 +970,11 @@ console.log(PuffBaseClub.getStatus());</div>
 
     function isWalkable(x, z) {
       const r = playerRadius;
-      // Stair shaft: |x| <= 2, z in [-14, 0] — only passable while latched onto stairs
-      if (onStairs) return Math.abs(x) <= 2 - r && z <= 0.6 && z >= -14.6;
+      // Stair shaft + apron: |x| <= 2, z in [-14, 1.5] — confined while latched
+      if (onStairs) return Math.abs(x) <= 2 - r && z <= 1.6 && z >= -14.6;
       if (level === "upper") {
+        // The stairwell opening is a hole unless you're on the stairs
+        if (Math.abs(x) <= 2 && z <= 0.5 && z >= -1.5) return false;
         const inFoyer = Math.abs(x) <= 12 - r && z >= -12 + r && z <= 12 - r;
         const inHallway = Math.abs(x) <= 4 - r && z >= -51.8 + r && z <= -11;
         return inFoyer || inHallway;
@@ -967,17 +1000,16 @@ console.log(PuffBaseClub.getStatus());</div>
       const x = camera.position.x;
       const z = camera.position.z;
 
-      // Stair shaft latching & floor transitions.
-      // Latch only when stepping onto the visible stair strip (z > -1.5) heading
-      // deeper in, so hallway/foyer traffic crossing the buried shaft stays put.
-      const inShaft = Math.abs(x) <= 2 && z <= 0.5 && z >= -14;
+      // Stair shaft latching & floor transitions. Latch on approaching the
+      // stairwell mouth heading down; the floor opening blocks everyone else.
+      const inShaft = Math.abs(x) <= 2 && z <= 1.5 && z >= -14;
       if (level === "upper") {
-        if (!onStairs && inShaft && z > -1.5 && z < prevZ) onStairs = true;
+        if (!onStairs && inShaft && z > -0.5 && z < prevZ) onStairs = true;
         else if (onStairs && z <= -14) { level = "club"; onStairs = false; }
         else if (onStairs && !inShaft) onStairs = false;
       } else {
         if (!onStairs && inShaft) onStairs = true;
-        else if (onStairs && z >= 0) { level = "upper"; onStairs = false; }
+        else if (onStairs && z >= 0.6) { level = "upper"; onStairs = false; }
         else if (onStairs && !inShaft) onStairs = false;
       }
 
