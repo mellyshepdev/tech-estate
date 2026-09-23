@@ -338,8 +338,9 @@
   <div id="start">
     <div id="start-box">
       <div id="start-title">TECH ESTATE & PUFFBASE</div>
-      <div id="start-sub">Click anywhere to enter the Estate & Underground Clubhouse</div>
+      <div id="start-sub">Click anywhere to enter the Estate, 2nd Floor Balcony & Underground Clubhouse</div>
       <div class="badge-container">
+        <span class="badge">🏰 Grand 2nd Floor Balcony</span>
         <span class="badge">CrowdSec Bouncer</span>
         <span class="badge">Suricata Security</span>
         <span class="badge">ser.ops Butler</span>
@@ -564,7 +565,7 @@ console.log(PuffBaseClub.getStatus());</div>
     // --- Scene Setup ---
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x05020a);
-    scene.fog = new THREE.FogExp2(0x1a062e, 0.03); // Hypnotic purple fog
+    scene.fog = new THREE.FogExp2(0x1a062e, 0.02); // Hypnotic purple fog
 
     const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 300);
     camera.position.set(0, 1.7, 10);
@@ -613,6 +614,7 @@ console.log(PuffBaseClub.getStatus());</div>
     const wallMat = new THREE.MeshStandardMaterial({ color: 0x271042, roughness: 0.6 });
     const doorMat = new THREE.MeshStandardMaterial({ color: 0x4a1d6d, roughness: 0.3 });
     const goldMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8, roughness: 0.2 });
+    const marbleMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.2, metalness: 0.1 });
 
     // Slime Material - Oozing Glowing Green / Purple Goop
     const slimeMat = new THREE.MeshStandardMaterial({
@@ -649,13 +651,82 @@ console.log(PuffBaseClub.getStatus());</div>
     scene.add(foyerFloor);
 
     const foyerCeiling = new THREE.Mesh(new THREE.BoxGeometry(24, 0.2, 24), wallMat);
-    foyerCeiling.position.set(0, 8, 0);
+    foyerCeiling.position.set(0, 12, 0); // Raised ceiling height for 2-story grandeur
     scene.add(foyerCeiling);
 
     // Walls
-    createWall(-12, 4, 0, 0.4, 8, 24); // West Wall
-    createWall(12, 4, 0, 0.4, 8, 24);  // East Wall
-    createWall(0, 4, 12, 24, 8, 0.4);   // South Wall (Front Gate / Entrance)
+    createWall(-12, 6, 0, 0.4, 12, 24); // West Wall
+    createWall(12, 6, 0, 0.4, 12, 24);  // East Wall
+    createWall(0, 6, 12, 24, 12, 0.4);   // South Wall (Front Gate / Entrance)
+
+    // ==========================================
+    // 1B. GRAND 2ND FLOOR BALCONY (EXTREMELY DETAILED)
+    // ==========================================
+    // Balcony Floor Dimensions: Y = 6.0, X = [-11, 11], Z = [0, 11]
+    const balconyFloor = new THREE.Mesh(new THREE.BoxGeometry(22, 0.3, 11), marbleMat);
+    balconyFloor.position.set(0, 6.0, 5.5);
+    scene.add(balconyFloor);
+
+    // Grand Stairs leading from Foyer up to 2nd Floor Balcony (X: 8, Y: 0 -> 6.0, Z: 8 -> 1)
+    const balconyStairsGroup = new THREE.Group();
+    for (let i = 0; i < 20; i++) {
+      const step = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.3, 0.6), marbleMat);
+      step.position.set(8.5, 0.15 + i * 0.3, 9.5 - i * 0.45);
+      balconyStairsGroup.add(step);
+    }
+    scene.add(balconyStairsGroup);
+
+    // Detailed Balustrade Railings around Balcony edge (Z = 0.2)
+    const railingMat = goldMat;
+    const balconyRailingGroup = new THREE.Group();
+
+    // Top & Bottom Rail Bar
+    const topBar = new THREE.Mesh(new THREE.BoxGeometry(18, 0.1, 0.15), railingMat);
+    topBar.position.set(-2, 7.1, 0.2);
+    balconyRailingGroup.add(topBar);
+
+    const bottomBar = new THREE.Mesh(new THREE.BoxGeometry(18, 0.08, 0.12), railingMat);
+    bottomBar.position.set(-2, 6.2, 0.2);
+    balconyRailingGroup.add(bottomBar);
+
+    // Ornate Baluster Pillars
+    for (let x = -10.5; x <= 6.5; x += 0.8) {
+      const baluster = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.8, 12), railingMat);
+      baluster.position.set(x, 6.6, 0.2);
+      balconyRailingGroup.add(baluster);
+    }
+
+    // Side Railing along West Balcony Edge
+    const sideTopBar = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.1, 10.5), railingMat);
+    sideTopBar.position.set(-10.8, 7.1, 5.5);
+    balconyRailingGroup.add(sideTopBar);
+
+    for (let z = 0.5; z <= 10.5; z += 0.8) {
+      const baluster = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.8, 12), railingMat);
+      baluster.position.set(-10.8, 6.6, z);
+      balconyRailingGroup.add(baluster);
+    }
+
+    scene.add(balconyRailingGroup);
+
+    // Decorative Balcony Spotlights & Lanterns
+    for (let x of [-8, -2, 4]) {
+      const bLight = new THREE.PointLight(0xfef08a, 60, 12);
+      bLight.position.set(x, 8.5, 5.5);
+      scene.add(bLight);
+
+      const lantern = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.7, 0.4), goldMat);
+      lantern.position.set(x, 8.8, 5.5);
+      scene.add(lantern);
+    }
+
+    // Balcony VIP Lookout Interaction Point
+    const balconyLookout = new THREE.Group();
+    balconyLookout.position.set(0, 6.0, 1.0);
+    balconyLookout.userData = { name: "2nd Floor Grand Balcony Lookout", type: "info", infoText: "Grand Balcony: Enjoying the high-level VIP overview of the Tech Estate!" };
+    scene.add(balconyLookout);
+    interactiveObjects.push(balconyLookout);
+
 
     // HAProxy Front Gate Guard Post (South Entrance)
     const frontGate = new THREE.Group();
@@ -944,13 +1015,22 @@ console.log(PuffBaseClub.getStatus());</div>
       const x = camera.position.x;
       const z = camera.position.z;
 
-      // Allow vertical travel down the stairwell to the club
-      if (z < 0 && z > -15) {
+      // Allow climbing stairs up to Balcony (X: 6 -> 11, Z: 1 -> 9.5)
+      if (x > 6 && z > 0 && z < 10) {
+        const balconyProgress = (z) / 9.5;
+        camera.position.y = THREE.MathUtils.lerp(1.7, 7.7, balconyProgress);
+      } else if (z > 0 && z < 11 && Math.abs(x) < 11 && camera.position.y > 4.0) {
+        // Walking on 2nd floor balcony
+        camera.position.y = 7.7;
+      } else if (z < 0 && z > -15) {
+        // Stairwell down to club
         const progress = Math.abs(z) / 15;
         camera.position.y = THREE.MathUtils.lerp(1.7, clubY + 1.7, progress);
       } else if (z <= -15) {
+        // In Underground Club
         camera.position.y = clubY + 1.7;
       } else {
+        // Ground floor foyer
         camera.position.y = 1.7;
       }
     }
