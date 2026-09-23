@@ -932,26 +932,61 @@ console.log(PuffBaseClub.getStatus());</div>
       }
     }
 
+    // Floor state: mansion upper level vs underground club (stacked footprints)
+    const playerRadius = 0.4;
+    let level = "upper";
+    let onStairs = false;
+
+    function isWalkable(x, z) {
+      const r = playerRadius;
+      // Stair shaft: |x| <= 2, z in [-14, 0] — only passable while latched onto stairs
+      if (onStairs) return Math.abs(x) <= 2 - r && z <= 0.6 && z >= -14.6;
+      if (level === "upper") {
+        const inFoyer = Math.abs(x) <= 12 - r && z >= -12 + r && z <= 12 - r;
+        const inHallway = Math.abs(x) <= 4 - r && z >= -51.8 + r && z <= -11;
+        return inFoyer || inHallway;
+      }
+      return Math.abs(x) <= 20 - r && z >= -50 + r && z <= -10.2 - r;
+    }
+
     function movePlayer() {
       if (!controls.isLocked) return;
+
+      const prevX = camera.position.x;
+      const prevZ = camera.position.z;
 
       if (keys["KeyW"] || keys["ArrowUp"]) controls.moveForward(playerSpeed);
       if (keys["KeyS"] || keys["ArrowDown"]) controls.moveForward(-playerSpeed);
       if (keys["KeyA"] || keys["ArrowLeft"]) controls.moveRight(-playerSpeed);
       if (keys["KeyD"] || keys["ArrowRight"]) controls.moveRight(playerSpeed);
 
-      // Clamp position boundaries
+      // Wall collision — resolve per axis so movement slides along walls
+      if (!isWalkable(camera.position.x, prevZ)) camera.position.x = prevX;
+      if (!isWalkable(camera.position.x, camera.position.z)) camera.position.z = prevZ;
+
       const x = camera.position.x;
       const z = camera.position.z;
 
-      // Allow vertical travel down the stairwell to the club
-      if (z < 0 && z > -15) {
-        const progress = Math.abs(z) / 15;
-        camera.position.y = THREE.MathUtils.lerp(1.7, clubY + 1.7, progress);
-      } else if (z <= -15) {
-        camera.position.y = clubY + 1.7;
+      // Stair shaft latching & floor transitions.
+      // Latch only when stepping onto the visible stair strip (z > -1.5) heading
+      // deeper in, so hallway/foyer traffic crossing the buried shaft stays put.
+      const inShaft = Math.abs(x) <= 2 && z <= 0.5 && z >= -14;
+      if (level === "upper") {
+        if (!onStairs && inShaft && z > -1.5 && z < prevZ) onStairs = true;
+        else if (onStairs && z <= -14) { level = "club"; onStairs = false; }
+        else if (onStairs && !inShaft) onStairs = false;
       } else {
-        camera.position.y = 1.7;
+        if (!onStairs && inShaft) onStairs = true;
+        else if (onStairs && z >= 0) { level = "upper"; onStairs = false; }
+        else if (onStairs && !inShaft) onStairs = false;
+      }
+
+      // Camera height: interpolate on stairs, flat per level otherwise
+      if (onStairs) {
+        const progress = THREE.MathUtils.clamp(-z / 14, 0, 1);
+        camera.position.y = THREE.MathUtils.lerp(1.7, clubY + 1.7, progress);
+      } else {
+        camera.position.y = level === "club" ? clubY + 1.7 : 1.7;
       }
     }
 
