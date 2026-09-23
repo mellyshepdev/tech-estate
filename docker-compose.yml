@@ -6,4 +6,5 @@ services:
       - "8090:80"
     volumes:
       - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./cave.jpeg:/usr/share/nginx/html/cave.jpeg:ro
     restart: unless-stopped
