@@ -425,19 +425,40 @@ console.log(PuffBase);</div>
     controls.addEventListener("lock", () => start.style.display = "none");
     controls.addEventListener("unlock", () => start.style.display = "grid");
 
-    // --- Lights & Materials ---
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    // --- Ambient & Chandelier Lighting ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
     const foyerLight = new THREE.PointLight(0xffecd1, 120, 30);
     foyerLight.position.set(0, 7, 0);
+    foyerLight.castShadow = true;
     scene.add(foyerLight);
 
-    const foyerFloorMat = new THREE.MeshStandardMaterial({ color: 0x221c18, roughness: 0.3 });
+    // Decorative Chandelier Geometry
+    const chandelierGroup = new THREE.Group();
+    chandelierGroup.position.set(0, 7.5, 0);
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.2 });
+    const ringGeo = new THREE.TorusGeometry(2, 0.08, 16, 32);
+    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringMesh.rotation.x = Math.PI / 2;
+    chandelierGroup.add(ringMesh);
+
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2;
+      const bulbGeo = new THREE.SphereGeometry(0.15, 16, 16);
+      const bulbMat = new THREE.MeshBasicMaterial({ color: 0xfff4d6 });
+      const bulb = new THREE.Mesh(bulbGeo, bulbMat);
+      bulb.position.set(Math.cos(angle) * 2, -0.2, Math.sin(angle) * 2);
+      chandelierGroup.add(bulb);
+    }
+    scene.add(chandelierGroup);
+
+    // Materials
+    const foyerFloorMat = new THREE.MeshStandardMaterial({ color: 0x221c18, roughness: 0.3, metalness: 0.1 });
     const foyerWallMat = new THREE.MeshStandardMaterial({ color: 0x3d352e, roughness: 0.7 });
     const hallwayFloorMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.4 });
     const hallwayWallMat = new THREE.MeshStandardMaterial({ color: 0x333a48, roughness: 0.6 });
-    const doorMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.4 });
+    const doorMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.4, metalness: 0.2 });
     const handleMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.1 });
     const tableWoodMat = new THREE.MeshStandardMaterial({ color: 0x2b1810, roughness: 0.5 });
     const feltMat = new THREE.MeshStandardMaterial({ color: 0x106b38, roughness: 0.8 });
@@ -462,7 +483,7 @@ console.log(PuffBase);</div>
     scene.add(foyerFloor);
 
     const foyerCeiling = new THREE.Mesh(new THREE.BoxGeometry(30, 0.2, 30), foyerWallMat);
-    foyerCeiling.position.set(0, 14, 0); // Raised for Balcony
+    foyerCeiling.position.set(0, 14, 0);
     scene.add(foyerCeiling);
 
     createWall(-8.5, 7, 15, 13, 14, 0.4);
@@ -472,7 +493,7 @@ console.log(PuffBase);</div>
     createWall(-9.5, 7, -15, 11, 14, 0.4);
     createWall(9.5, 7, -15, 11, 14, 0.4);
 
-    // Front Gate Guard Post (HAProxy) & Butler ser.ops
+    // Front Door & HAProxy Front Gate
     const frontGate = new THREE.Group();
     frontGate.position.set(0, 0, 14.8);
     const gatePanel = new THREE.Mesh(new THREE.BoxGeometry(4, 6, 0.2), doorMat);
@@ -482,14 +503,55 @@ console.log(PuffBase);</div>
     scene.add(frontGate);
     interactiveDoors.push(frontGate);
 
-    // Card Game Table
-    const tableGroup = new THREE.Group();
-    tableGroup.position.set(0, 0, 2);
+    // Center Card Game Table
+    const centerTableGroup = new THREE.Group();
+    centerTableGroup.position.set(0, 0, 2);
     const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.5, 0.2, 32), feltMat);
     tableTop.position.y = 1.0;
     tableTop.scale.set(1.4, 1, 1);
-    tableGroup.add(tableTop);
-    scene.add(tableGroup);
+    centerTableGroup.add(tableTop);
+    const tableBase = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 1.2, 1.0, 16), tableWoodMat);
+    tableBase.position.y = 0.5;
+    centerTableGroup.add(tableBase);
+
+    // Cards & Chips
+    const cardGeo = new THREE.BoxGeometry(0.25, 0.01, 0.35);
+    const cardColors = [0xffffff, 0xd90429, 0xffffff, 0x111111];
+    for (let i = 0; i < 12; i++) {
+      const cardMat = new THREE.MeshBasicMaterial({ color: cardColors[i % cardColors.length] });
+      const card = new THREE.Mesh(cardGeo, cardMat);
+      const angle = (i / 12) * Math.PI * 2;
+      card.position.set(Math.cos(angle) * 2.2, 1.11, Math.sin(angle) * 1.5);
+      centerTableGroup.add(card);
+    }
+    for (let i = 0; i < 20; i++) {
+      const chipGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.04, 16);
+      const chipColors = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0xffffff];
+      const chipStack = new THREE.Mesh(chipGeo, new THREE.MeshStandardMaterial({ color: chipColors[i % chipColors.length] }));
+      chipStack.position.set((Math.random() - 0.5) * 2.5, 1.12 + (i % 4) * 0.04, (Math.random() - 0.5) * 1.8);
+      centerTableGroup.add(chipStack);
+    }
+    scene.add(centerTableGroup);
+
+    // Chess Table (Left)
+    const chessTableGroup = new THREE.Group();
+    chessTableGroup.position.set(-8, 0, -5);
+    const cTableTop = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.15, 2.2), tableWoodMat);
+    cTableTop.position.y = 1.0;
+    chessTableGroup.add(cTableTop);
+    scene.add(chessTableGroup);
+
+    // Arcade Game Station (Right)
+    const arcadeGroup = new THREE.Group();
+    arcadeGroup.position.set(8, 0, -5);
+    const arcadeBody = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.4, 1.2), new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.4 }));
+    arcadeBody.position.y = 1.2;
+    arcadeGroup.add(arcadeBody);
+    const arcadeScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.9), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
+    arcadeScreen.position.set(0, 1.6, 0.61);
+    arcadeGroup.add(arcadeScreen);
+    scene.add(arcadeGroup);
+
 
     // ==========================================
     // 1B. HUGE 2ND FLOOR BALCONY
@@ -499,14 +561,12 @@ console.log(PuffBase);</div>
     balconyFloor.position.set(0, 7.0, 8.0);
     scene.add(balconyFloor);
 
-    // Railing
     for (let x = -13; x <= 13; x += 1.2) {
       const baluster = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 1.0, 12), handleMat);
       baluster.position.set(x, 7.7, 2.1);
       scene.add(baluster);
     }
 
-    // Grand Stairs to Balcony
     const balconyStairsGroup = new THREE.Group();
     for (let i = 0; i < 22; i++) {
       const step = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.32, 0.6), balconyFloorMat);
@@ -589,12 +649,30 @@ console.log(PuffBase);</div>
     createWall(30, 11, -145, 0.4, 22, 80, garageWallMat);
     createWall(0, 11, -185, 60, 22, 0.4, garageWallMat);
 
+    // Pillars & Spotlights in Garage
+    const pillarGeo = new THREE.CylinderGeometry(1.2, 1.4, 22, 32);
+    const pillarMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
+    for (let z = -115; z >= -175; z -= 18) {
+      const pL = new THREE.Mesh(pillarGeo, pillarMat); pL.position.set(-26, 11, z); scene.add(pL);
+      const pR = new THREE.Mesh(pillarGeo, pillarMat); pR.position.set(26, 11, z); scene.add(pR);
+    }
+
     // 4 Supercars in Garage
     function createSupercar(x, z, rot, color) {
-      const car = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.8, 5.2), new THREE.MeshStandardMaterial({ color: color, metalness: 0.9 }));
-      car.position.set(x, 0.5, z);
-      car.rotation.y = rot;
-      scene.add(car);
+      const carGroup = new THREE.Group();
+      carGroup.position.set(x, 0, z);
+      carGroup.rotation.y = rot;
+
+      const bodyMat = new THREE.MeshStandardMaterial({ color: color, metalness: 0.9, roughness: 0.1 });
+      const lowerBody = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.7, 5.2), bodyMat);
+      lowerBody.position.y = 0.5;
+      carGroup.add(lowerBody);
+
+      const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.6, 2.6), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
+      cabin.position.set(0, 1.0, -0.2);
+      carGroup.add(cabin);
+
+      scene.add(carGroup);
     }
     createSupercar(-15, -135, Math.PI / 6, 0xd90429);  // Crimson Red
     createSupercar(15, -135, -Math.PI / 6, 0x0284c7); // Electric Blue
