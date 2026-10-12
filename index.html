@@ -2,28 +2,33 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Tech Estate & PuffBase Underground Clubhouse</title>
+  <title>Tech Estate, Grand Mansion Garage & PuffBase Underground Clubhouse</title>
+
   <style>
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: #05020a;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a0a0c;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       user-select: none;
       color: #f8fafc;
     }
 
-    /* Start Overlay */
     #start {
       position: fixed;
       z-index: 100;
       inset: 0;
       display: grid;
       place-items: center;
-      background: radial-gradient(circle at center, #1e0b36 0%, #05020a 100%);
+      color: #ffffff;
+      background: radial-gradient(circle at center, #1e0b36 0%, #0a0c10 100%);
       cursor: pointer;
-      box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+      font-size: 24px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-align: center;
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
     }
 
     #start-box {
@@ -31,9 +36,8 @@
       border: 1px solid rgba(168, 85, 247, 0.3);
       border-radius: 16px;
       background: rgba(15, 8, 28, 0.85);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(12px);
       box-shadow: 0 20px 50px rgba(147, 51, 234, 0.25);
-      text-align: center;
       transition: transform 0.3s ease, border-color 0.3s ease;
     }
 
@@ -43,19 +47,18 @@
     }
 
     #start-title {
-      font-size: 38px;
+      font-size: 36px;
       font-weight: 800;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #a855f7, #22c55e, #e879f9);
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #a855f7, #22c55e, #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
     }
 
     #start-sub {
       font-size: 16px;
-      color: #d8b4fe;
-      margin-bottom: 16px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
     }
 
     .badge-container {
@@ -75,7 +78,6 @@
       font-size: 12px;
     }
 
-    /* Crosshair & Interaction Prompt */
     #crosshair {
       position: fixed;
       top: 50%;
@@ -84,11 +86,11 @@
       height: 8px;
       margin-left: -4px;
       margin-top: -4px;
-      background: rgba(233, 213, 255, 0.9);
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 50%;
       pointer-events: none;
       z-index: 10;
-      box-shadow: 0 0 10px #c084fc;
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
     }
 
     #prompt {
@@ -97,15 +99,15 @@
       left: 50%;
       bottom: 40px;
       transform: translateX(-50%);
-      padding: 12px 24px;
+      padding: 14px 28px;
       color: #f8fafc;
-      background: rgba(24, 9, 43, 0.9);
-      border: 1px solid rgba(192, 132, 252, 0.5);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(168, 85, 247, 0.5);
       border-radius: 30px;
-      font-size: 15px;
+      font-size: 16px;
       display: none;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 15px rgba(168, 85, 247, 0.3);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       pointer-events: none;
     }
 
@@ -114,12 +116,12 @@
       background: #9333ea;
       color: #ffffff;
       padding: 2px 8px;
-      border-radius: 6px;
+      border-radius: 4px;
       font-weight: 700;
-      margin-right: 8px;
+      margin-right: 6px;
     }
 
-    /* Modals & Overlays */
+    /* Modals */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -180,7 +182,6 @@
       color: #fff;
     }
 
-    /* Keycloak Modal Styling */
     .form-group {
       margin-bottom: 16px;
     }
@@ -191,7 +192,6 @@
       color: #c084fc;
       margin-bottom: 6px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .form-control {
@@ -204,12 +204,6 @@
       color: #fff;
       font-size: 14px;
       outline: none;
-      transition: border-color 0.2s ease;
-    }
-
-    .form-control:focus {
-      border-color: #a855f7;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
     }
 
     .btn-primary {
@@ -222,16 +216,8 @@
       font-weight: 700;
       cursor: pointer;
       font-size: 15px;
-      box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(147, 51, 234, 0.6);
-    }
-
-    /* Settings Menu Styling */
     .setting-item {
       display: flex;
       justify-content: space-between;
@@ -240,29 +226,17 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .setting-label {
-      font-size: 15px;
-      color: #e9d5ff;
-    }
-
     .setting-slider {
       accent-color: #a855f7;
       width: 150px;
     }
 
-    /* VIP Drink & Repo Menu Styling */
     .repo-card {
       background: rgba(10, 5, 20, 0.6);
       border: 1px solid rgba(168, 85, 247, 0.25);
       border-radius: 10px;
       padding: 16px;
       margin-bottom: 12px;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .repo-card:hover {
-      transform: translateX(4px);
-      border-color: #a855f7;
     }
 
     .repo-title {
@@ -271,13 +245,6 @@
       color: #22c55e;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-    }
-
-    .repo-desc {
-      font-size: 13px;
-      color: #cbd5e1;
-      margin: 6px 0 10px 0;
     }
 
     .btn-sm {
@@ -288,17 +255,10 @@
       border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
       text-decoration: none;
       display: inline-block;
     }
 
-    .btn-sm:hover {
-      background: #9333ea;
-      color: #fff;
-    }
-
-    /* Code Editor Styling */
     .code-container {
       background: #0d0714;
       border-radius: 8px;
@@ -308,11 +268,10 @@
       color: #4ade80;
       font-size: 13px;
       line-height: 1.5;
-      overflow-x: auto;
       max-height: 350px;
+      overflow-x: auto;
     }
 
-    /* Mirror Clone URL Styling */
     .clone-box {
       background: rgba(10, 5, 20, 0.9);
       border: 1px dashed rgba(34, 197, 94, 0.5);
@@ -328,247 +287,127 @@
       font-family: monospace;
       color: #22c55e;
       font-size: 14px;
-      word-break: break-all;
     }
   </style>
 </head>
 
 <body>
-  <!-- Start Screen -->
   <div id="start">
     <div id="start-box">
-      <div id="start-title">TECH ESTATE & PUFFBASE</div>
-      <div id="start-sub">Click anywhere to enter the Estate, 2nd Floor Balcony & Underground Clubhouse</div>
+      <div id="start-title">TECH ESTATE & GRAND MAP</div>
+      <div id="start-sub">Foyer • V-Wing Hallways • Grand Garage • 2nd Floor Balcony • PuffBase Underground Club</div>
       <div class="badge-container">
         <span class="badge">🏰 Grand 2nd Floor Balcony</span>
-        <span class="badge">CrowdSec Bouncer</span>
-        <span class="badge">Suricata Security</span>
-        <span class="badge">ser.ops Butler</span>
-        <span class="badge">HAProxy Gate</span>
-        <span class="badge">Wazuh</span>
-        <span class="badge">Forge</span>
-        <span class="badge">Barcode Store</span>
-        <span class="badge">diesel.tech Garage</span>
-        <span class="badge">Odoo</span>
-        <span class="badge">Magento2</span>
-        <span class="badge" style="background:rgba(34,197,94,0.2); border-color:#22c55e; color:#4ade80;">PuffBase Club</span>
+        <span class="badge">🏎️ 4x Mansion Garage (diesel.tech)</span>
+        <span class="badge">🧪 PuffBase Underground Club</span>
+        <span class="badge">🔐 Keycloak Bouncer</span>
+        <span class="badge">🍸 Bartender Settings</span>
+        <span class="badge">🍹 Hulk VIP Drink Repos</span>
+        <span class="badge">🪩 Dance Floor Code Editor</span>
+        <span class="badge">🪞 Mirror Git Clone URL</span>
       </div>
     </div>
   </div>
 
-  <!-- HUD Crosshair & Prompts -->
   <div id="crosshair"></div>
-  <div id="prompt"><span id="prompt-key">E</span> <span id="prompt-text">Interact</span></div>
+  <div id="prompt"><span id="prompt-key">E</span> <span id="prompt-text">Open Door</span></div>
 
-  <!-- 1. Keycloak Login Modal (Bouncer at Club Entrance) -->
+  <!-- Modals -->
   <div id="modal-keycloak" class="modal-overlay">
     <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#a855f7;">🔐 CrowdSec Bouncer</span> - Keycloak Authentication
-        </div>
+        <div class="modal-title"><span style="color:#a855f7;">🔐 CrowdSec Bouncer</span> - Keycloak SSO</div>
         <button class="modal-close" onclick="closeModal('modal-keycloak')">&times;</button>
       </div>
-      <div style="margin-bottom: 16px; font-size: 14px; color: #cbd5e1;">
-        Halt! The Bouncer requires identity verification via Keycloak before entering the <strong>PuffBase Underground Clubhouse</strong>.
-      </div>
       <form onsubmit="event.preventDefault(); loginKeycloak();">
-        <div class="form-group">
-          <label>Realm / Authority</label>
-          <input type="text" class="form-control" value="PuffBase-Master-Realm" readonly>
-        </div>
-        <div class="form-group">
-          <label>Username or Email</label>
-          <input type="text" id="keycloak-user" class="form-control" placeholder="agent@tech-estate.io" value="puffbase_VIP">
-        </div>
-        <div class="form-group">
-          <label>Passcode / Security Token</label>
-          <input type="password" class="form-control" value="••••••••••••">
-        </div>
-        <button type="submit" class="btn-primary">Authenticate via Keycloak SSO</button>
+        <div class="form-group"><label>Realm</label><input type="text" class="form-control" value="PuffBase-Master-Realm" readonly></div>
+        <div class="form-group"><label>Username</label><input type="text" id="keycloak-user" class="form-control" value="puffbase_agent"></div>
+        <button type="submit" class="btn-primary">Authenticate via Keycloak</button>
       </form>
     </div>
   </div>
 
-  <!-- 2. Bartender Settings Modal -->
   <div id="modal-settings" class="modal-overlay">
     <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#e879f9;">🍸 PuffBase Bartender</span> - Club & System Settings
-        </div>
+        <div class="modal-title"><span style="color:#e879f9;">🍸 PuffBase Bartender</span> - Settings</div>
         <button class="modal-close" onclick="closeModal('modal-settings')">&times;</button>
       </div>
-      <div style="margin-bottom: 16px; font-size: 14px; color: #cbd5e1;">
-        "Welcome to the bar! How can I adjust your club experience today?"
+      <div class="setting-item">
+        <span>Purple Smoke Fog Density</span>
+        <input type="range" class="setting-slider" min="10" max="100" value="60" onchange="updateSmokeDensity(this.value)">
       </div>
       <div class="setting-item">
-        <div class="setting-label">Club Audio & Music Volume</div>
-        <input type="range" id="setting-volume" class="setting-slider" min="0" max="100" value="70" onchange="updateAudioVolume(this.value)">
-      </div>
-      <div class="setting-item">
-        <div class="setting-label">Purple Smoke & Fog Density</div>
-        <input type="range" id="setting-smoke" class="setting-slider" min="10" max="100" value="60" onchange="updateSmokeDensity(this.value)">
-      </div>
-      <div class="setting-item">
-        <div class="setting-label">Hypnotic Slime Glow Intensity</div>
-        <input type="range" id="setting-slime" class="setting-slider" min="20" max="100" value="80" onchange="updateSlimeGlow(this.value)">
-      </div>
-      <div class="setting-item">
-        <div class="setting-label">Player Movement Speed</div>
-        <input type="range" id="setting-speed" class="setting-slider" min="5" max="25" value="12" onchange="updateMoveSpeed(this.value)">
+        <span>Purple Slime Glow Intensity</span>
+        <input type="range" class="setting-slider" min="20" max="100" value="80" onchange="updateSlimeGlow(this.value)">
       </div>
     </div>
   </div>
 
-  <!-- 3. VIP Section Drink Menu & Repositories Modal -->
   <div id="modal-vip-menu" class="modal-overlay">
-    <div class="modal-container" style="max-width: 750px;">
+    <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#22c55e;">🧪 Green Incredible Hulk Drink Menu</span> & Repositories
-        </div>
+        <div class="modal-title"><span style="color:#22c55e;">🧪 Green Incredible Hulk Drink Menu</span> & Repos</div>
         <button class="modal-close" onclick="closeModal('modal-vip-menu')">&times;</button>
       </div>
-      <div style="margin-bottom: 16px; font-size: 14px; color: #cbd5e1;">
-        Opening the VIP Drink Menu reveals the active codebase repositories across the Estate!
-      </div>
-
-      <!-- Drink Special Feature -->
-      <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); padding: 12px; border-radius: 8px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 28px;">🍹</span>
-        <div>
-          <strong style="color: #4ade80;">VIP Special: Green Incredible Hulk Cocktail</strong>
-          <div style="font-size: 12px; color: #cbd5e1;">Hennessy + Hypnotiq + Glowing Green Slime Extract. Grants full repo access!</div>
-        </div>
-      </div>
-
       <div class="repo-card">
-        <div class="repo-title">
-          <span>🐙 PuffBase / puffbase-underground</span>
-          <span style="font-size: 12px; color: #a855f7;">GitHub • ⭐ 142</span>
-        </div>
-        <div class="repo-desc">Underground 3JS club with purple slime, purple smoke, Keycloak authentication, and live interactive zones.</div>
-        <div style="display:flex; gap:8px;">
-          <a href="https://github.com" target="_blank" class="btn-sm">View GitHub Repo</a>
-          <button class="btn-sm" onclick="copyRepoUrl('https://github.com/PuffBase/puffbase-underground.git')">Copy HTTPS URL</button>
+        <div class="repo-title"><span>PuffBase / puffbase-underground</span><span>GitHub ⭐ 142</span></div>
+        <div style="margin-top:8px;">
+          <a href="https://github.com" target="_blank" class="btn-sm">View GitHub</a>
+          <button class="btn-sm" onclick="copyRepoUrl('https://github.com/PuffBase/puffbase-underground.git')">Copy HTTPS</button>
         </div>
       </div>
-
       <div class="repo-card">
-        <div class="repo-title">
-          <span>🦊 diesel-tech / mansion-garage</span>
-          <span style="font-size: 12px; color: #f97316;">GitLab • ⭐ 98</span>
-        </div>
-        <div class="repo-desc">Grand Mansion Garage telemetry and diesel engine diagnostics suite.</div>
-        <div style="display:flex; gap:8px;">
+        <div class="repo-title"><span>diesel-tech / mansion-garage</span><span>GitLab ⭐ 98</span></div>
+        <div style="margin-top:8px;">
           <a href="https://gbonds1.gitlab.io/diesel.tech/" target="_blank" class="btn-sm">View Live App</a>
-          <button class="btn-sm" onclick="copyRepoUrl('https://gitlab.com/gbonds1/diesel.tech.git')">Copy Git URL</button>
-        </div>
-      </div>
-
-      <div class="repo-card">
-        <div class="repo-title">
-          <span>🛡️ security / crowdsec-suricata-stack</span>
-          <span style="font-size: 12px; color: #38bdf8;">GitHub • ⭐ 84</span>
-        </div>
-        <div class="repo-desc">CrowdSec Bouncer & Suricata Guard Post integration scripts for estate perimeter security.</div>
-        <div style="display:flex; gap:8px;">
-          <a href="https://github.com" target="_blank" class="btn-sm">View Repository</a>
-          <button class="btn-sm" onclick="copyRepoUrl('https://github.com/tech-estate/security-stack.git')">Copy HTTPS URL</button>
+          <button class="btn-sm" onclick="copyRepoUrl('git@gitlab.com:gbonds1/diesel.tech.git')">Copy Git SSH</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 4. Dance Floor Code Editor Modal -->
   <div id="modal-code-editor" class="modal-overlay">
-    <div class="modal-container" style="max-width: 800px;">
+    <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#c084fc;">🪩 Dance Floor Code Editor</span>
-        </div>
+        <div class="modal-title"><span style="color:#c084fc;">🪩 Dance Floor Code Editor</span></div>
         <button class="modal-close" onclick="closeModal('modal-code-editor')">&times;</button>
       </div>
-      <div style="margin-bottom: 12px; font-size: 14px; color: #cbd5e1;">
-        You walked onto the dance floor! Edit live configuration code while dancing:
-      </div>
-      <div class="code-container" id="editor-code-box" contenteditable="true" spellcheck="false">// PuffBase Underground Clubhouse - Live Config
-const PuffBaseClub = {
-  theme: "Purple Slime & Oozing Goop",
-  smokeEffect: "Dense Hypnotic Purple Fog",
-  signatureDrink: "Green Incredible Hulk",
-  bouncer: "CrowdSec (Keycloak SSO Enabled)",
-  bartender: "Interactive Settings Manager",
-  securityGuard: "Suricata NIDS",
-  frontGate: "HAProxy Guard Post",
-  butler: "ser.ops System Automation",
-  garage: "diesel.tech",
-  store: "Barcode Scanner Service",
-
-  danceFloorActive: true,
-  currentTrack: "Hypnotic Synthwave BPM 128",
-
-  getStatus: function() {
-    return `[PuffBase] Status: ALL SYSTEMS OPERATIONAL`;
-  }
+      <div class="code-container" contenteditable="true">// PuffBase Club - Dance Floor Editor
+const PuffBase = {
+  theme: "Purple Slime & Smoke",
+  drink: "Green Incredible Hulk",
+  status: "ONLINE"
 };
-
-console.log(PuffBaseClub.getStatus());</div>
-      <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
-        <button class="btn-primary" style="width: auto; padding: 8px 24px;" onclick="runEditorCode()">▶ Execute Code</button>
-        <span id="editor-status" style="font-size: 12px; color: #4ade80;">Status: Ready to edit</span>
-      </div>
+console.log(PuffBase);</div>
+      <button class="btn-primary" style="margin-top:14px;" onclick="alert('Executed Code!')">Run Code</button>
     </div>
   </div>
 
-  <!-- 5. Bathroom Mirror Git Clone Modal -->
   <div id="modal-mirror" class="modal-overlay">
     <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#38bdf8;">🪞 Bathroom Mirror</span> - Git Clone URL Generator
-        </div>
+        <div class="modal-title"><span style="color:#38bdf8;">🪞 Bathroom Mirror</span> - Git Clone URL</div>
         <button class="modal-close" onclick="closeModal('modal-mirror')">&times;</button>
       </div>
-      <div style="margin-bottom: 16px; font-size: 14px; color: #cbd5e1;">
-        Looking into the glowing bathroom mirror reflects your Git & HTTPS clone endpoints:
-      </div>
-
-      <div style="margin-bottom: 12px;">
-        <label style="font-size: 12px; color: #c084fc;">GitHub HTTPS Clone URL:</label>
-        <div class="clone-box">
-          <span class="clone-url">https://github.com/PuffBase/puffbase-club.git</span>
-          <button class="btn-sm" onclick="copyRepoUrl('https://github.com/PuffBase/puffbase-club.git')">Copy</button>
-        </div>
-      </div>
-
-      <div style="margin-bottom: 12px;">
-        <label style="font-size: 12px; color: #c084fc;">GitLab SSH Clone URL:</label>
-        <div class="clone-box">
-          <span class="clone-url">git@gitlab.com:gbonds1/diesel.tech.git</span>
-          <button class="btn-sm" onclick="copyRepoUrl('git@gitlab.com:gbonds1/diesel.tech.git')">Copy</button>
-        </div>
-      </div>
-
-      <div style="font-size: 12px; color: #94a3b8; margin-top: 14px;">
-        💡 Tip: Paste into your terminal using <code>git clone &lt;URL&gt;</code> to download repository source code instantly.
+      <div class="clone-box">
+        <span class="clone-url">https://github.com/PuffBase/puffbase-club.git</span>
+        <button class="btn-sm" onclick="copyRepoUrl('https://github.com/PuffBase/puffbase-club.git')">Copy</button>
       </div>
     </div>
   </div>
 
-  <!-- Three.js Module Import -->
   <script type="module">
     import * as THREE from "https://esm.sh/three@0.185.1";
     import { PointerLockControls } from "https://esm.sh/three@0.185.1/examples/jsm/controls/PointerLockControls.js";
 
     // --- Scene Setup ---
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x05020a);
-    scene.fog = new THREE.FogExp2(0x1a062e, 0.02); // Hypnotic purple fog
+    scene.background = new THREE.Color(0x0a0d14);
+    scene.fog = new THREE.FogExp2(0x1a062e, 0.012);
 
-    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 300);
-    camera.position.set(0, 1.7, 10);
+    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 350);
+    camera.position.set(0, 1.7, 5);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(innerWidth, innerHeight);
@@ -582,59 +421,32 @@ console.log(PuffBaseClub.getStatus());</div>
     const promptEl = document.getElementById("prompt");
     const promptTextEl = document.getElementById("prompt-text");
 
-    start.addEventListener("click", () => {
-      controls.lock();
-    });
+    start.addEventListener("click", () => controls.lock());
+    controls.addEventListener("lock", () => start.style.display = "none");
+    controls.addEventListener("unlock", () => start.style.display = "grid");
 
-    controls.addEventListener("lock", () => {
-      start.style.display = "none";
-    });
-
-    controls.addEventListener("unlock", () => {
-      start.style.display = "grid";
-    });
-
-    // Audio volume & player speed
-    let playerSpeed = 0.12;
-
-    // --- Global Lights ---
-    const ambientLight = new THREE.AmbientLight(0xd8b4fe, 0.6);
+    // --- Lights & Materials ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
 
-    // Foyer Main Light
-    const foyerLight = new THREE.PointLight(0xa855f7, 80, 25);
+    const foyerLight = new THREE.PointLight(0xffecd1, 120, 30);
     foyerLight.position.set(0, 7, 0);
     scene.add(foyerLight);
 
-    // --- Interactive Objects Register ---
-    const interactiveObjects = [];
+    const foyerFloorMat = new THREE.MeshStandardMaterial({ color: 0x221c18, roughness: 0.3 });
+    const foyerWallMat = new THREE.MeshStandardMaterial({ color: 0x3d352e, roughness: 0.7 });
+    const hallwayFloorMat = new THREE.MeshStandardMaterial({ color: 0x1f242d, roughness: 0.4 });
+    const hallwayWallMat = new THREE.MeshStandardMaterial({ color: 0x333a48, roughness: 0.6 });
+    const doorMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.4 });
+    const handleMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.1 });
+    const tableWoodMat = new THREE.MeshStandardMaterial({ color: 0x2b1810, roughness: 0.5 });
+    const feltMat = new THREE.MeshStandardMaterial({ color: 0x106b38, roughness: 0.8 });
+    const slimeMat = new THREE.MeshStandardMaterial({ color: 0x22c55e, emissive: 0x15803d, emissiveIntensity: 0.8, roughness: 0.1, transparent: true, opacity: 0.85 });
 
-    // Materials
-    const floorMat = new THREE.MeshStandardMaterial({ color: 0x180b28, roughness: 0.4 });
-    const wallMat = new THREE.MeshStandardMaterial({ color: 0x271042, roughness: 0.6 });
-    const doorMat = new THREE.MeshStandardMaterial({ color: 0x4a1d6d, roughness: 0.3 });
-    const goldMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8, roughness: 0.2 });
-    const marbleMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.2, metalness: 0.1 });
+    const interactiveDoors = [];
 
-    // Slime Material - Oozing Glowing Green / Purple Goop
-    const slimeMat = new THREE.MeshStandardMaterial({
-      color: 0x22c55e,
-      emissive: 0x15803d,
-      emissiveIntensity: 0.8,
-      roughness: 0.1,
-      transparent: true,
-      opacity: 0.85
-    });
-
-    const hulkDrinkMat = new THREE.MeshStandardMaterial({
-      color: 0x4ade80,
-      emissive: 0x22c55e,
-      emissiveIntensity: 1.2,
-      roughness: 0.1
-    });
-
-    function createWall(x, y, z, w, h, d, mat = wallMat) {
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    function createWall(x, y, z, w, h, d, material = foyerWallMat) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
       mesh.position.set(x, y, z);
       mesh.receiveShadow = true;
       mesh.castShadow = true;
@@ -643,414 +455,304 @@ console.log(PuffBaseClub.getStatus());</div>
     }
 
     // ==========================================
-    // 1. UPPER LEVEL - MANSION FOYER & ROOMS
+    // 1. CENTRAL FOYER (Playing Area & Games)
     // ==========================================
-    // Foyer Floor & Ceiling
-    const foyerFloor = new THREE.Mesh(new THREE.BoxGeometry(24, 0.2, 24), floorMat);
+    const foyerFloor = new THREE.Mesh(new THREE.BoxGeometry(30, 0.2, 30), foyerFloorMat);
     foyerFloor.position.set(0, -0.1, 0);
     scene.add(foyerFloor);
 
-    const foyerCeiling = new THREE.Mesh(new THREE.BoxGeometry(24, 0.2, 24), wallMat);
-    foyerCeiling.position.set(0, 12, 0); // Raised ceiling height for 2-story grandeur
+    const foyerCeiling = new THREE.Mesh(new THREE.BoxGeometry(30, 0.2, 30), foyerWallMat);
+    foyerCeiling.position.set(0, 14, 0); // Raised for Balcony
     scene.add(foyerCeiling);
 
-    // Walls
-    createWall(-12, 6, 0, 0.4, 12, 24); // West Wall
-    createWall(12, 6, 0, 0.4, 12, 24);  // East Wall
-    createWall(0, 6, 12, 24, 12, 0.4);   // South Wall (Front Gate / Entrance)
+    createWall(-8.5, 7, 15, 13, 14, 0.4);
+    createWall(8.5, 7, 15, 13, 14, 0.4);
+    createWall(-15, 7, 0, 0.4, 14, 30);
+    createWall(15, 7, 0, 0.4, 14, 30);
+    createWall(-9.5, 7, -15, 11, 14, 0.4);
+    createWall(9.5, 7, -15, 11, 14, 0.4);
+
+    // Front Gate Guard Post (HAProxy) & Butler ser.ops
+    const frontGate = new THREE.Group();
+    frontGate.position.set(0, 0, 14.8);
+    const gatePanel = new THREE.Mesh(new THREE.BoxGeometry(4, 6, 0.2), doorMat);
+    gatePanel.position.y = 3;
+    frontGate.add(gatePanel);
+    frontGate.userData = { isDoor: true, name: "HAProxy Front Gate Guard Post", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+    scene.add(frontGate);
+    interactiveDoors.push(frontGate);
+
+    // Card Game Table
+    const tableGroup = new THREE.Group();
+    tableGroup.position.set(0, 0, 2);
+    const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.5, 0.2, 32), feltMat);
+    tableTop.position.y = 1.0;
+    tableTop.scale.set(1.4, 1, 1);
+    tableGroup.add(tableTop);
+    scene.add(tableGroup);
 
     // ==========================================
-    // 1B. GRAND 2ND FLOOR BALCONY (EXTREMELY DETAILED)
+    // 1B. HUGE 2ND FLOOR BALCONY
     // ==========================================
-    // Balcony Floor Dimensions: Y = 6.0, X = [-11, 11], Z = [0, 11]
-    const balconyFloor = new THREE.Mesh(new THREE.BoxGeometry(22, 0.3, 11), marbleMat);
-    balconyFloor.position.set(0, 6.0, 5.5);
+    const balconyFloorMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.2 });
+    const balconyFloor = new THREE.Mesh(new THREE.BoxGeometry(28, 0.3, 12), balconyFloorMat);
+    balconyFloor.position.set(0, 7.0, 8.0);
     scene.add(balconyFloor);
 
-    // Grand Stairs leading from Foyer up to 2nd Floor Balcony (X: 8, Y: 0 -> 6.0, Z: 8 -> 1)
+    // Railing
+    for (let x = -13; x <= 13; x += 1.2) {
+      const baluster = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 1.0, 12), handleMat);
+      baluster.position.set(x, 7.7, 2.1);
+      scene.add(baluster);
+    }
+
+    // Grand Stairs to Balcony
     const balconyStairsGroup = new THREE.Group();
-    for (let i = 0; i < 20; i++) {
-      const step = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.3, 0.6), marbleMat);
-      step.position.set(8.5, 0.15 + i * 0.3, 9.5 - i * 0.45);
+    for (let i = 0; i < 22; i++) {
+      const step = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.32, 0.6), balconyFloorMat);
+      step.position.set(10.5, 0.16 + i * 0.32, 12.5 - i * 0.5);
       balconyStairsGroup.add(step);
     }
     scene.add(balconyStairsGroup);
 
-    // Detailed Balustrade Railings around Balcony edge (Z = 0.2)
-    const railingMat = goldMat;
-    const balconyRailingGroup = new THREE.Group();
-
-    // Top & Bottom Rail Bar
-    const topBar = new THREE.Mesh(new THREE.BoxGeometry(18, 0.1, 0.15), railingMat);
-    topBar.position.set(-2, 7.1, 0.2);
-    balconyRailingGroup.add(topBar);
-
-    const bottomBar = new THREE.Mesh(new THREE.BoxGeometry(18, 0.08, 0.12), railingMat);
-    bottomBar.position.set(-2, 6.2, 0.2);
-    balconyRailingGroup.add(bottomBar);
-
-    // Ornate Baluster Pillars
-    for (let x = -10.5; x <= 6.5; x += 0.8) {
-      const baluster = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.8, 12), railingMat);
-      baluster.position.set(x, 6.6, 0.2);
-      balconyRailingGroup.add(baluster);
-    }
-
-    // Side Railing along West Balcony Edge
-    const sideTopBar = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.1, 10.5), railingMat);
-    sideTopBar.position.set(-10.8, 7.1, 5.5);
-    balconyRailingGroup.add(sideTopBar);
-
-    for (let z = 0.5; z <= 10.5; z += 0.8) {
-      const baluster = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.8, 12), railingMat);
-      baluster.position.set(-10.8, 6.6, z);
-      balconyRailingGroup.add(baluster);
-    }
-
-    scene.add(balconyRailingGroup);
-
-    // Decorative Balcony Spotlights & Lanterns
-    for (let x of [-8, -2, 4]) {
-      const bLight = new THREE.PointLight(0xfef08a, 60, 12);
-      bLight.position.set(x, 8.5, 5.5);
-      scene.add(bLight);
-
-      const lantern = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.7, 0.4), goldMat);
-      lantern.position.set(x, 8.8, 5.5);
-      scene.add(lantern);
-    }
-
-    // Balcony VIP Lookout Interaction Point
-    const balconyLookout = new THREE.Group();
-    balconyLookout.position.set(0, 6.0, 1.0);
-    balconyLookout.userData = { name: "2nd Floor Grand Balcony Lookout", type: "info", infoText: "Grand Balcony: Enjoying the high-level VIP overview of the Tech Estate!" };
-    scene.add(balconyLookout);
-    interactiveObjects.push(balconyLookout);
-
-
-    // HAProxy Front Gate Guard Post (South Entrance)
-    const frontGate = new THREE.Group();
-    frontGate.position.set(0, 0, 11.5);
-    const gateSign = new THREE.Mesh(new THREE.BoxGeometry(3, 1, 0.2), goldMat);
-    gateSign.position.set(0, 4, 0);
-    frontGate.add(gateSign);
-    frontGate.userData = { name: "HAProxy Front Gate Guard Post", type: "info", infoText: "HAProxy Load Balancer & Front Gate Guard Post operational." };
-    scene.add(frontGate);
-    interactiveObjects.push(frontGate);
-
-    // Butler (ser.ops) Station in Foyer
-    const butlerGroup = new THREE.Group();
-    butlerGroup.position.set(6, 0, 6);
-    const butlerBody = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.5, 1.8, 16), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
-    butlerBody.position.y = 0.9;
-    butlerGroup.add(butlerBody);
-    const butlerHead = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), goldMat);
-    butlerHead.position.y = 2.0;
-    butlerGroup.add(butlerHead);
-    butlerGroup.userData = { name: "ser.ops Butler", type: "info", infoText: "Butler ser.ops: 'Welcome, sir. All automated estate operations are running smooth.'" };
-    scene.add(butlerGroup);
-    interactiveObjects.push(butlerGroup);
-
-    // Upstairs Room Doorways in Hallway (North)
-    createWall(-8, 4, -12, 8, 8, 0.4);
-    createWall(8, 4, -12, 8, 8, 0.4);
-
-    // Hallway connecting rooms
-    const hallwayFloor = new THREE.Mesh(new THREE.BoxGeometry(8, 0.2, 40), floorMat);
-    hallwayFloor.position.set(0, -0.1, -32);
-    scene.add(hallwayFloor);
-
-    // Dedicated Rooms along Hallway
-    function addRoom(x, z, title, url, colorHex = 0xa855f7) {
-      const roomDoor = new THREE.Group();
-      roomDoor.position.set(x, 0, z);
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(0.2, 3.5, 2.2), new THREE.MeshStandardMaterial({ color: colorHex }));
-      frame.position.y = 1.75;
-      roomDoor.add(frame);
-      roomDoor.userData = { name: title, type: "link", url: url };
-      scene.add(roomDoor);
-      interactiveObjects.push(roomDoor);
-    }
-
-    addRoom(-4.1, -20, "Wazuh Security Command Room", "https://github.com", 0x38bdf8);
-    addRoom(4.1, -20, "Suricata NIDS Security Guard Post", "https://github.com", 0xef4444);
-    addRoom(-4.1, -30, "Forge Workshop & Lab", "https://github.com", 0xf59e0b);
-    addRoom(4.1, -30, "Barcode Scanner Estate Store", "https://github.com", 0x10b981);
-    addRoom(-4.1, -40, "Odoo ERP Suite Room", "https://github.com", 0xa855f7);
-    addRoom(4.1, -40, "Magento2 E-Commerce Room", "https://github.com", 0xec4899);
-
-    // Mansion Garage (diesel.tech) at end of Hallway (Z = -52)
-    const garageDoor = new THREE.Group();
-    garageDoor.position.set(0, 0, -51.8);
-    const gPanel = new THREE.Mesh(new THREE.BoxGeometry(6, 4, 0.3), new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8 }));
-    gPanel.position.y = 2;
-    garageDoor.add(gPanel);
-    garageDoor.userData = { name: "Grand Garage (diesel.tech)", type: "link", url: "https://gbonds1.gitlab.io/diesel.tech/" };
-    scene.add(garageDoor);
-    interactiveObjects.push(garageDoor);
-
 
     // ==========================================
-    // 2. PUFFBASE UNDERGROUND CLUBHOUSE
+    // 2. V-SHAPED HALLWAY (18 Doors Per Wing)
     // ==========================================
-    // Stairwell in Center Foyer leading underground (Y: 0 -> -8, Z: 0 -> -15)
-    const stairGroup = new THREE.Group();
-    stairGroup.position.set(0, 0, 0);
-    for (let i = 0; i < 16; i++) {
-      const step = new THREE.Mesh(new THREE.BoxGeometry(4, 0.5, 1.0), new THREE.MeshStandardMaterial({ color: 0x3b0764, roughness: 0.3 }));
-      step.position.set(0, -0.25 - i * 0.5, -i * 0.9);
-      stairGroup.add(step);
-    }
-    scene.add(stairGroup);
+    const wingLength = 72;
+    const wingWidth = 8;
+    const wingAngle = Math.PI / 7;
+    const wingStart = new THREE.Vector3(0, 0, -19);
+    const wingDirections = [
+      new THREE.Vector3(-Math.sin(wingAngle), 0, -Math.cos(wingAngle)),
+      new THREE.Vector3(Math.sin(wingAngle), 0, -Math.cos(wingAngle))
+    ];
 
-    // Underground Club Level Dimensions: Y = -8, X = [-20, 20], Z = [-50, -10]
-    const clubY = -8;
-    const clubFloor = new THREE.Mesh(new THREE.BoxGeometry(40, 0.2, 40), new THREE.MeshStandardMaterial({ color: 0x0c0314, roughness: 0.2 }));
-    clubFloor.position.set(0, clubY - 0.1, -30);
-    scene.add(clubFloor);
+    function addWing(direction, side) {
+      const center = wingStart.clone().add(direction.clone().multiplyScalar(wingLength / 2));
+      const angle = Math.atan2(direction.x, -direction.z);
+      const floor = new THREE.Mesh(new THREE.BoxGeometry(wingWidth, 0.2, wingLength), hallwayFloorMat);
+      floor.position.copy(center);
+      floor.rotation.y = angle;
+      scene.add(floor);
 
-    const clubCeiling = new THREE.Mesh(new THREE.BoxGeometry(40, 0.2, 40), wallMat);
-    clubCeiling.position.set(0, clubY + 6, -30);
-    scene.add(clubCeiling);
+      const wallOffset = wingWidth / 2;
+      for (const offset of [-wallOffset, wallOffset]) {
+        const wall = new THREE.Mesh(new THREE.BoxGeometry(0.2, 8, wingLength), hallwayWallMat);
+        const wallPos = center.clone().add(new THREE.Vector3(Math.cos(angle) * offset, 4, Math.sin(angle) * offset));
+        wall.position.copy(wallPos);
+        wall.rotation.y = angle;
+        scene.add(wall);
+      }
 
-    // Club Outer Walls
-    createWall(-20, clubY + 3, -30, 0.4, 6, 40); // West
-    createWall(20, clubY + 3, -30, 0.4, 6, 40);  // East
-    createWall(0, clubY + 3, -50, 40, 6, 0.4);   // North (Back Wall)
-    createWall(0, clubY + 3, -10, 40, 6, 0.4);   // South
+      const roomNames = ["Wazuh Security Command", "Suricata Guard Post", "Forge Lab", "Barcode Scanner Store", "Odoo Suite", "Magento2 Store"];
 
-    // Hypnotic Purple Lights in Club
-    for (let x of [-10, 10]) {
-      for (let z of [-20, -40]) {
-        const pLight = new THREE.PointLight(0xa855f7, 90, 20);
-        pLight.position.set(x, clubY + 5, z);
-        scene.add(pLight);
+      for (let i = 0; i < 9; i++) {
+        const distance = 8 + i * 7.1;
+        const doorPos = wingStart.clone().add(direction.clone().multiplyScalar(distance));
+        const outward = side === "left" ? new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle)) : new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
+
+        const name = roomNames[i % roomNames.length];
+        addHallwayDoor(doorPos.x + outward.x * (wallOffset - 0.05), doorPos.z + outward.z * (wallOffset - 0.05), side, name);
       }
     }
 
-    // --- PURPLE SLIME & OOZING GOOP (3D Puddles & Wall Drips) ---
+    function addHallwayDoor(x, z, side, labelText) {
+      const doorGroup = new THREE.Group();
+      doorGroup.position.set(x, 0, z);
+      doorGroup.rotation.y = side === "left" ? -wingAngle : wingAngle;
+
+      const panel = new THREE.Mesh(new THREE.BoxGeometry(0.1, 3.1, 1.7), doorMat);
+      panel.position.set(0, 1.55, 0);
+      doorGroup.add(panel);
+
+      doorGroup.userData = { isDoor: true, name: labelText, targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+      scene.add(doorGroup);
+      interactiveDoors.push(doorGroup);
+    }
+
+    addWing(wingDirections[0], "left");
+    addWing(wingDirections[1], "right");
+
+
+    // ==========================================
+    // 3. MANSION GARAGE (Grand 4x Scale Experience - diesel.tech)
+    // ==========================================
+    const garageFloorMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.1, metalness: 0.6 });
+    const garageWallMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4 });
+
+    const garageFloor = new THREE.Mesh(new THREE.BoxGeometry(60, 0.2, 80), garageFloorMat);
+    garageFloor.position.set(0, -0.1, -145);
+    scene.add(garageFloor);
+
+    createWall(-30, 11, -145, 0.4, 22, 80, garageWallMat);
+    createWall(30, 11, -145, 0.4, 22, 80, garageWallMat);
+    createWall(0, 11, -185, 60, 22, 0.4, garageWallMat);
+
+    // 4 Supercars in Garage
+    function createSupercar(x, z, rot, color) {
+      const car = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.8, 5.2), new THREE.MeshStandardMaterial({ color: color, metalness: 0.9 }));
+      car.position.set(x, 0.5, z);
+      car.rotation.y = rot;
+      scene.add(car);
+    }
+    createSupercar(-15, -135, Math.PI / 6, 0xd90429);  // Crimson Red
+    createSupercar(15, -135, -Math.PI / 6, 0x0284c7); // Electric Blue
+    createSupercar(-15, -165, Math.PI / 6, 0x15803d);  // Racing Green
+    createSupercar(15, -165, -Math.PI / 6, 0xeab308); // Gold Hypercar
+
+    const garageDoor = new THREE.Group();
+    garageDoor.position.set(0, 0, -104.8);
+    garageDoor.userData = { isDoor: true, name: "Mansion Garage Door (diesel.tech)", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+    scene.add(garageDoor);
+    interactiveDoors.push(garageDoor);
+
+
+    // ==========================================
+    // 4. PUFFBASE UNDERGROUND CLUBHOUSE
+    // ==========================================
+    const clubY = -8;
+    const clubFloor = new THREE.Mesh(new THREE.BoxGeometry(40, 0.2, 40), new THREE.MeshStandardMaterial({ color: 0x0c0314 }));
+    clubFloor.position.set(0, clubY - 0.1, -30);
+    scene.add(clubFloor);
+
+    // Staircase down from Foyer
+    const clubStairs = new THREE.Group();
+    for (let i = 0; i < 16; i++) {
+      const step = new THREE.Mesh(new THREE.BoxGeometry(4, 0.5, 1.0), new THREE.MeshStandardMaterial({ color: 0x3b0764 }));
+      step.position.set(0, -0.25 - i * 0.5, -i * 0.9);
+      clubStairs.add(step);
+    }
+    scene.add(clubStairs);
+
+    // Purple Slime Puddles & Drips
     for (let i = 0; i < 8; i++) {
-      const puddle = new THREE.Mesh(new THREE.CylinderGeometry(1.2 + Math.random(), 1.5 + Math.random(), 0.05, 16), slimeMat);
+      const puddle = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.8, 0.05, 16), slimeMat);
       puddle.position.set((Math.random() - 0.5) * 30, clubY + 0.03, -15 - Math.random() * 30);
       scene.add(puddle);
     }
 
-    // Slime Stalactites / Wall Drips
-    for (let i = 0; i < 10; i++) {
-      const drip = new THREE.Mesh(new THREE.ConeGeometry(0.2, 1.5, 8), slimeMat);
-      drip.position.set((Math.random() - 0.5) * 36, clubY + 5, -12 - Math.random() * 35);
-      drip.rotation.x = Math.PI;
-      scene.add(drip);
-    }
+    // CrowdSec Bouncer (Keycloak Login)
+    const bouncer = new THREE.Group();
+    bouncer.position.set(0, clubY, -14);
+    bouncer.userData = { isModal: true, modalId: "modal-keycloak", name: "CrowdSec Bouncer (Keycloak SSO)" };
+    scene.add(bouncer);
+    interactiveDoors.push(bouncer);
 
-    // --- ANIMATED PURPLE SMOKE PARTICLES ---
-    const smokeGroup = new THREE.Group();
-    const smokeGeo = new THREE.SphereGeometry(0.6, 8, 8);
-    const smokeMat = new THREE.MeshBasicMaterial({ color: 0x7e22ce, transparent: true, opacity: 0.25 });
-    const smokeParticles = [];
+    // Bartender (Settings)
+    const bartender = new THREE.Group();
+    bartender.position.set(-14, clubY, -30);
+    bartender.userData = { isModal: true, modalId: "modal-settings", name: "PuffBase Bartender (Settings)" };
+    scene.add(bartender);
+    interactiveDoors.push(bartender);
 
-    for (let i = 0; i < 40; i++) {
-      const p = new THREE.Mesh(smokeGeo, smokeMat);
-      p.position.set((Math.random() - 0.5) * 36, clubY + 0.5 + Math.random() * 2.5, -12 - Math.random() * 35);
-      smokeGroup.add(p);
-      smokeParticles.push(p);
-    }
-    scene.add(smokeGroup);
+    // VIP Hulk Drinks (Repo Menu)
+    const vipTable = new THREE.Group();
+    vipTable.position.set(14, clubY, -30);
+    vipTable.userData = { isModal: true, modalId: "modal-vip-menu", name: "VIP Section (Green Incredible Hulk Drinks & Repos)" };
+    scene.add(vipTable);
+    interactiveDoors.push(vipTable);
 
-    // --- 1. BOUNCER STATION (CrowdSec Keycloak Login) ---
-    const bouncerGroup = new THREE.Group();
-    bouncerGroup.position.set(0, clubY, -14);
-    const bouncerBody = new THREE.Mesh(new THREE.BoxGeometry(0.8, 2.0, 0.6), new THREE.MeshStandardMaterial({ color: 0x111827 }));
-    bouncerBody.position.y = 1.0;
-    bouncerGroup.add(bouncerBody);
-    const bouncerHead = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), new THREE.MeshStandardMaterial({ color: 0x374151 }));
-    bouncerHead.position.y = 2.2;
-    bouncerGroup.add(bouncerHead);
-
-    bouncerGroup.userData = { name: "CrowdSec Bouncer (Keycloak SSO)", type: "modal", modalId: "modal-keycloak" };
-    scene.add(bouncerGroup);
-    interactiveObjects.push(bouncerGroup);
-
-    // --- 2. MAIN BAR & BARTENDER (Settings Menu) ---
-    const barGroup = new THREE.Group();
-    barGroup.position.set(-14, clubY, -30);
-
-    // Bar Counter
-    const barCounter = new THREE.Mesh(new THREE.BoxGeometry(2.0, 1.1, 10.0), new THREE.MeshStandardMaterial({ color: 0x2e1065, roughness: 0.2 }));
-    barCounter.position.set(0, 0.55, 0);
-    barGroup.add(barCounter);
-
-    // Bartender NPC behind counter
-    const bartender = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.4, 1.8, 16), new THREE.MeshStandardMaterial({ color: 0xe879f9 }));
-    bartender.position.set(-1.0, 0.9, 0);
-    barGroup.add(bartender);
-
-    // Glowing Green Incredible Hulk Drinks on Bar
-    for (let z of [-3, -1, 1, 3]) {
-      const drink = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.08, 0.3, 12), hulkDrinkMat);
-      drink.position.set(0, 1.25, z);
-      barGroup.add(drink);
-    }
-
-    barGroup.userData = { name: "PuffBase Bartender (Settings Menu)", type: "modal", modalId: "modal-settings" };
-    scene.add(barGroup);
-    interactiveObjects.push(barGroup);
-
-    // --- 3. VIP SECTION (Green Incredible Hulk Drink Menu & Repositories) ---
-    const vipGroup = new THREE.Group();
-    vipGroup.position.set(14, clubY, -30);
-
-    // VIP Plush Leather Couch
-    const couch = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 8.0), new THREE.MeshStandardMaterial({ color: 0x581c87, roughness: 0.4 }));
-    couch.position.set(0, 0.4, 0);
-    vipGroup.add(couch);
-
-    // Low VIP Table with Drink Menus & Hulk Drinks
-    const vipTable = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.5, 4.0), goldMat);
-    vipTable.position.set(-2.0, 0.25, 0);
-    vipGroup.add(vipTable);
-
-    const vipDrink = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.35, 12), hulkDrinkMat);
-    vipDrink.position.set(-2.0, 0.68, 0);
-    vipGroup.add(vipDrink);
-
-    vipGroup.userData = { name: "VIP Section (Green Incredible Hulk Drink Menu & Repos)", type: "modal", modalId: "modal-vip-menu" };
-    scene.add(vipGroup);
-    interactiveObjects.push(vipGroup);
-
-    // --- 4. DANCE FLOOR (Code Editor Overlay) ---
-    const danceFloorGeo = new THREE.BoxGeometry(12, 0.05, 12);
-    const danceFloorMat = new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0x7e22ce, emissiveIntensity: 0.8, roughness: 0.1 });
-    const danceFloor = new THREE.Mesh(danceFloorGeo, danceFloorMat);
-    danceFloor.position.set(0, clubY + 0.05, -30);
+    // Dance Floor (Code Editor)
+    const danceFloor = new THREE.Group();
+    danceFloor.position.set(0, clubY, -30);
+    danceFloor.userData = { isModal: true, modalId: "modal-code-editor", name: "Dance Floor (Open Code Editor)" };
     scene.add(danceFloor);
+    interactiveDoors.push(danceFloor);
 
-    // Dance floor interaction trigger region
-    const danceTriggerGroup = new THREE.Group();
-    danceTriggerGroup.position.set(0, clubY, -30);
-    danceTriggerGroup.userData = { name: "Dance Floor (Open Code Editor)", type: "modal", modalId: "modal-code-editor" };
-    scene.add(danceTriggerGroup);
-    interactiveObjects.push(danceTriggerGroup);
-
-    // --- 5. BATHROOM MIRROR (Git Clone URLs) ---
-    const bathroomGroup = new THREE.Group();
-    bathroomGroup.position.set(-16, clubY, -46);
-
-    // Wall mirror mesh
-    const mirrorMesh = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.8, 0.1), new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.95, roughness: 0.05 }));
-    mirrorMesh.position.set(0, 2.0, 0);
-    bathroomGroup.add(mirrorMesh);
-
-    bathroomGroup.userData = { name: "Bathroom Mirror (Tap to Copy Git Clone URLs)", type: "modal", modalId: "modal-mirror" };
-    scene.add(bathroomGroup);
-    interactiveObjects.push(bathroomGroup);
+    // Bathroom Mirror (Git Clone URL)
+    const mirror = new THREE.Group();
+    mirror.position.set(-16, clubY, -46);
+    mirror.userData = { isModal: true, modalId: "modal-mirror", name: "Bathroom Mirror (Tap for Git Clone URLs)" };
+    scene.add(mirror);
+    interactiveDoors.push(mirror);
 
 
     // ==========================================
-    // 3. PLAYER MOVEMENT & INTERACTION LOGIC
+    // 5. PLAYER CONTROLS & INTERACTION
     // ==========================================
     const keys = {};
+    const speed = 0.12;
 
-    addEventListener("keydown", e => { keys[e.code] = true; });
-    addEventListener("keyup", e => { keys[e.code] = false; });
+    addEventListener("keydown", e => keys[e.code] = true);
+    addEventListener("keyup", e => keys[e.code] = false);
 
-    // Press 'E' to interact
     addEventListener("keydown", e => {
       if (e.code !== "KeyE" || !controls.isLocked) return;
 
-      const target = getNearestInteractiveObject();
-      if (target) {
-        if (target.userData.type === "modal") {
+      const nearest = getNearestDoor();
+      if (nearest) {
+        if (nearest.userData.isModal) {
           controls.unlock();
-          openModal(target.userData.modalId);
-        } else if (target.userData.type === "link") {
-          window.open(target.userData.url, "_blank");
-        } else if (target.userData.type === "info") {
-          alert(target.userData.infoText);
+          window.openModal(nearest.userData.modalId);
+        } else if (nearest.userData.targetUrl) {
+          window.location.href = nearest.userData.targetUrl;
         }
       }
     });
 
-    function getNearestInteractiveObject() {
+    function getNearestDoor() {
       let closest = null;
       let minDistance = 3.5;
       const camPos = camera.position;
 
-      for (let obj of interactiveObjects) {
+      interactiveDoors.forEach(d => {
         const pos = new THREE.Vector3();
-        obj.getWorldPosition(pos);
+        d.getWorldPosition(pos);
         const dist = camPos.distanceTo(pos);
         if (dist < minDistance) {
           minDistance = dist;
-          closest = obj;
+          closest = d;
         }
-      }
+      });
       return closest;
     }
 
-    function checkInteractionPrompt() {
+    function checkInteraction() {
       if (!controls.isLocked) {
         promptEl.style.display = "none";
         return;
       }
-
-      const target = getNearestInteractiveObject();
-      if (target) {
+      const nearest = getNearestDoor();
+      if (nearest) {
         promptEl.style.display = "block";
-        promptTextEl.textContent = `Interact with ${target.userData.name}`;
+        promptTextEl.textContent = `Interact with ${nearest.userData.name}`;
       } else {
         promptEl.style.display = "none";
       }
     }
 
-    function movePlayer() {
+    function move() {
       if (!controls.isLocked) return;
 
-      if (keys["KeyW"] || keys["ArrowUp"]) controls.moveForward(playerSpeed);
-      if (keys["KeyS"] || keys["ArrowDown"]) controls.moveForward(-playerSpeed);
-      if (keys["KeyA"] || keys["ArrowLeft"]) controls.moveRight(-playerSpeed);
-      if (keys["KeyD"] || keys["ArrowRight"]) controls.moveRight(playerSpeed);
+      if (keys["KeyW"]) controls.moveForward(speed);
+      if (keys["KeyS"]) controls.moveForward(-speed);
+      if (keys["KeyA"]) controls.moveRight(-speed);
+      if (keys["KeyD"]) controls.moveRight(speed);
 
-      // Clamp position boundaries
       const x = camera.position.x;
       const z = camera.position.z;
 
-      // Allow climbing stairs up to Balcony (X: 6 -> 11, Z: 1 -> 9.5)
-      if (x > 6 && z > 0 && z < 10) {
-        const balconyProgress = (z) / 9.5;
-        camera.position.y = THREE.MathUtils.lerp(1.7, 7.7, balconyProgress);
-      } else if (z > 0 && z < 11 && Math.abs(x) < 11 && camera.position.y > 4.0) {
-        // Walking on 2nd floor balcony
-        camera.position.y = 7.7;
+      // Handle multi-level height (Foyer ground 1.7, Balcony 8.7, Underground Club -6.3)
+      if (x > 8 && z > 0 && z < 13) {
+        const balconyProgress = z / 12.5;
+        camera.position.y = THREE.MathUtils.lerp(1.7, 8.7, balconyProgress);
+      } else if (z > 0 && z < 12 && Math.abs(x) < 14 && camera.position.y > 5.0) {
+        camera.position.y = 8.7; // Walking on 2nd floor balcony
       } else if (z < 0 && z > -15) {
-        // Stairwell down to club
         const progress = Math.abs(z) / 15;
         camera.position.y = THREE.MathUtils.lerp(1.7, clubY + 1.7, progress);
-      } else if (z <= -15) {
-        // In Underground Club
-        camera.position.y = clubY + 1.7;
+      } else if (z <= -15 && z > -50 && Math.abs(x) < 20) {
+        camera.position.y = clubY + 1.7; // Underground Club
       } else {
-        // Ground floor foyer
-        camera.position.y = 1.7;
+        camera.position.y = 1.7; // Ground level
       }
     }
 
-    // Animation Loop
     function animate() {
       requestAnimationFrame(animate);
-
-      movePlayer();
-      checkInteractionPrompt();
-
-      // Animate purple smoke particles
-      smokeParticles.forEach((p, idx) => {
-        p.position.y += Math.sin(Date.now() * 0.001 + idx) * 0.003;
-        p.rotation.y += 0.005;
-      });
-
-      // Pulse dance floor lighting
-      danceFloorMat.emissiveIntensity = 0.6 + Math.sin(Date.now() * 0.005) * 0.4;
-
+      move();
+      checkInteraction();
       renderer.render(scene, camera);
     }
 
@@ -1062,48 +764,12 @@ console.log(PuffBaseClub.getStatus());</div>
 
     animate();
 
-    // Global Window Helpers for Modals & Settings
-    window.openModal = function(id) {
-      document.getElementById(id).style.display = "grid";
-    };
-
-    window.closeModal = function(id) {
-      document.getElementById(id).style.display = "none";
-      controls.lock();
-    };
-
-    window.loginKeycloak = function() {
-      const user = document.getElementById("keycloak-user").value;
-      alert(`Keycloak SSO Authentication Successful! Welcome agent: ${user}`);
-      closeModal("modal-keycloak");
-    };
-
-    window.copyRepoUrl = function(url) {
-      navigator.clipboard.writeText(url);
-      alert(`Copied URL to Clipboard:\n${url}`);
-    };
-
-    window.runEditorCode = function() {
-      const statusEl = document.getElementById("editor-status");
-      statusEl.textContent = "Status: Executed successfully! (Check Browser Console)";
-      console.log("%c[PuffBase Dance Floor Editor] Code Executed!", "color: #22c55e; font-weight: bold; font-size: 14px;");
-    };
-
-    window.updateAudioVolume = function(val) {
-      console.log(`Audio volume set to: ${val}%`);
-    };
-
-    window.updateSmokeDensity = function(val) {
-      scene.fog.density = 0.01 + (val / 100) * 0.05;
-    };
-
-    window.updateSlimeGlow = function(val) {
-      slimeMat.emissiveIntensity = 0.2 + (val / 100) * 1.2;
-    };
-
-    window.updateMoveSpeed = function(val) {
-      playerSpeed = 0.05 + (val / 100) * 0.2;
-    };
+    window.openModal = id => document.getElementById(id).style.display = "grid";
+    window.closeModal = id => { document.getElementById(id).style.display = "none"; controls.lock(); };
+    window.loginKeycloak = () => { alert("Authenticated via Keycloak!"); window.closeModal("modal-keycloak"); };
+    window.copyRepoUrl = url => { navigator.clipboard.writeText(url); alert(`Copied:\n${url}`); };
+    window.updateSmokeDensity = val => scene.fog.density = 0.005 + (val / 100) * 0.03;
+    window.updateSlimeGlow = val => slimeMat.emissiveIntensity = 0.2 + (val / 100) * 1.2;
   </script>
 </body>
 </html>
