@@ -3,30 +3,41 @@
 <head>
   <meta charset="utf-8">
   <title>Tech Estate & PuffBase Underground Clubhouse</title>
+
   <style>
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: #05020a;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a0a0c;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       user-select: none;
       color: #f8fafc;
     }
 
-    /* Start Overlay */
     #start {
       position: fixed;
       z-index: 100;
       inset: 0;
       display: grid;
       place-items: center;
-      background:
-        radial-gradient(circle at center, rgba(30, 11, 54, 0.55) 0%, rgba(5, 2, 10, 0.85) 100%),
-        url('cave.jpeg') center / cover no-repeat,
-        #05020a;
+      color: #ffffff;
+      background: transparent;
       cursor: pointer;
-      box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+      font-size: 24px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    #start-hint {
+      align-self: end;
+      margin-bottom: 48px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(10, 8, 20, 0.6);
+      font-size: 15px;
+      letter-spacing: 1px;
     }
 
     #start-box {
@@ -34,9 +45,8 @@
       border: 1px solid rgba(168, 85, 247, 0.3);
       border-radius: 16px;
       background: rgba(15, 8, 28, 0.85);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(12px);
       box-shadow: 0 20px 50px rgba(147, 51, 234, 0.25);
-      text-align: center;
       transition: transform 0.3s ease, border-color 0.3s ease;
     }
 
@@ -46,19 +56,18 @@
     }
 
     #start-title {
-      font-size: 38px;
+      font-size: 36px;
       font-weight: 800;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #a855f7, #22c55e, #e879f9);
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #a855f7, #22c55e, #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
     }
 
     #start-sub {
       font-size: 16px;
-      color: #d8b4fe;
-      margin-bottom: 16px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
     }
 
     .badge-container {
@@ -78,7 +87,6 @@
       font-size: 12px;
     }
 
-    /* Crosshair & Interaction Prompt */
     #crosshair {
       position: fixed;
       top: 50%;
@@ -87,11 +95,11 @@
       height: 8px;
       margin-left: -4px;
       margin-top: -4px;
-      background: rgba(233, 213, 255, 0.9);
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 50%;
       pointer-events: none;
       z-index: 10;
-      box-shadow: 0 0 10px #c084fc;
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
     }
 
     #prompt {
@@ -100,15 +108,15 @@
       left: 50%;
       bottom: 40px;
       transform: translateX(-50%);
-      padding: 12px 24px;
+      padding: 14px 28px;
       color: #f8fafc;
-      background: rgba(24, 9, 43, 0.9);
-      border: 1px solid rgba(192, 132, 252, 0.5);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(168, 85, 247, 0.5);
       border-radius: 30px;
-      font-size: 15px;
+      font-size: 16px;
       display: none;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 15px rgba(168, 85, 247, 0.3);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       pointer-events: none;
     }
 
@@ -117,12 +125,12 @@
       background: #9333ea;
       color: #ffffff;
       padding: 2px 8px;
-      border-radius: 6px;
+      border-radius: 4px;
       font-weight: 700;
-      margin-right: 8px;
+      margin-right: 6px;
     }
 
-    /* Modals & Overlays */
+    /* Modals */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -183,7 +191,6 @@
       color: #fff;
     }
 
-    /* Keycloak Modal Styling */
     .form-group {
       margin-bottom: 16px;
     }
@@ -194,7 +201,6 @@
       color: #c084fc;
       margin-bottom: 6px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .form-control {
@@ -207,12 +213,6 @@
       color: #fff;
       font-size: 14px;
       outline: none;
-      transition: border-color 0.2s ease;
-    }
-
-    .form-control:focus {
-      border-color: #a855f7;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
     }
 
     .btn-primary {
@@ -225,16 +225,8 @@
       font-weight: 700;
       cursor: pointer;
       font-size: 15px;
-      box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(147, 51, 234, 0.6);
-    }
-
-    /* Settings Menu Styling */
     .setting-item {
       display: flex;
       justify-content: space-between;
@@ -243,29 +235,17 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .setting-label {
-      font-size: 15px;
-      color: #e9d5ff;
-    }
-
     .setting-slider {
       accent-color: #a855f7;
       width: 150px;
     }
 
-    /* VIP Drink & Repo Menu Styling */
     .repo-card {
       background: rgba(10, 5, 20, 0.6);
       border: 1px solid rgba(168, 85, 247, 0.25);
       border-radius: 10px;
       padding: 16px;
       margin-bottom: 12px;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .repo-card:hover {
-      transform: translateX(4px);
-      border-color: #a855f7;
     }
 
     .repo-title {
@@ -274,13 +254,6 @@
       color: #22c55e;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-    }
-
-    .repo-desc {
-      font-size: 13px;
-      color: #cbd5e1;
-      margin: 6px 0 10px 0;
     }
 
     .btn-sm {
@@ -291,17 +264,10 @@
       border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
       text-decoration: none;
       display: inline-block;
     }
 
-    .btn-sm:hover {
-      background: #9333ea;
-      color: #fff;
-    }
-
-    /* Code Editor Styling */
     .code-container {
       background: #0d0714;
       border-radius: 8px;
@@ -311,11 +277,10 @@
       color: #4ade80;
       font-size: 13px;
       line-height: 1.5;
-      overflow-x: auto;
       max-height: 350px;
+      overflow-x: auto;
     }
 
-    /* Mirror Clone URL Styling */
     .clone-box {
       background: rgba(10, 5, 20, 0.9);
       border: 1px dashed rgba(34, 197, 94, 0.5);
@@ -331,246 +296,113 @@
       font-family: monospace;
       color: #22c55e;
       font-size: 14px;
-      word-break: break-all;
     }
   </style>
 </head>
 
 <body>
-  <!-- Start Screen -->
-  <div id="start">
-    <div id="start-box">
-      <div id="start-title">TECH ESTATE & PUFFBASE</div>
-      <div id="start-sub">Click anywhere to enter the Estate & Underground Clubhouse</div>
-      <div class="badge-container">
-        <span class="badge">CrowdSec Bouncer</span>
-        <span class="badge">Suricata Security</span>
-        <span class="badge">ser.ops Butler</span>
-        <span class="badge">HAProxy Gate</span>
-        <span class="badge">Wazuh</span>
-        <span class="badge">Forge</span>
-        <span class="badge">Barcode Store</span>
-        <span class="badge">diesel.tech Garage</span>
-        <span class="badge">Odoo</span>
-        <span class="badge">Magento2</span>
-        <span class="badge" style="background:rgba(34,197,94,0.2); border-color:#22c55e; color:#4ade80;">PuffBase Club</span>
-      </div>
-    </div>
-  </div>
+  <div id="start"><div id="start-hint">Click to look around · WASD to walk · E to use</div></div>
 
-  <!-- HUD Crosshair & Prompts -->
   <div id="crosshair"></div>
-  <div id="prompt"><span id="prompt-key">E</span> <span id="prompt-text">Interact</span></div>
+  <div id="prompt"><span id="prompt-key">E</span> <span id="prompt-text">Open Door</span></div>
 
-  <!-- 1. Keycloak Login Modal (Bouncer at Club Entrance) -->
+  <!-- Modals -->
   <div id="modal-keycloak" class="modal-overlay">
     <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#a855f7;">🔐 CrowdSec Bouncer</span> - Keycloak Authentication
-        </div>
+        <div class="modal-title"><span style="color:#a855f7;">🔐 CrowdSec Bouncer</span> - Keycloak SSO</div>
         <button class="modal-close" onclick="closeModal('modal-keycloak')">&times;</button>
       </div>
-      <div style="margin-bottom: 16px; font-size: 14px; color: #cbd5e1;">
-        Halt! The Bouncer requires identity verification via Keycloak before entering the <strong>PuffBase Underground Clubhouse</strong>.
-      </div>
       <form onsubmit="event.preventDefault(); loginKeycloak();">
-        <div class="form-group">
-          <label>Realm / Authority</label>
-          <input type="text" class="form-control" value="PuffBase-Master-Realm" readonly>
-        </div>
-        <div class="form-group">
-          <label>Username or Email</label>
-          <input type="text" id="keycloak-user" class="form-control" placeholder="agent@tech-estate.io" value="puffbase_VIP">
-        </div>
-        <div class="form-group">
-          <label>Passcode / Security Token</label>
-          <input type="password" class="form-control" value="••••••••••••">
-        </div>
-        <button type="submit" class="btn-primary">Authenticate via Keycloak SSO</button>
+        <div class="form-group"><label>Realm</label><input type="text" class="form-control" value="PuffBase-Master-Realm" readonly></div>
+        <div class="form-group"><label>Username</label><input type="text" id="keycloak-user" class="form-control" value="puffbase_agent"></div>
+        <button type="submit" class="btn-primary">Authenticate via Keycloak</button>
       </form>
     </div>
   </div>
 
-  <!-- 2. Bartender Settings Modal -->
   <div id="modal-settings" class="modal-overlay">
     <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#e879f9;">🍸 PuffBase Bartender</span> - Club & System Settings
-        </div>
+        <div class="modal-title"><span style="color:#e879f9;">🍸 PuffBase Bartender</span> - Settings</div>
         <button class="modal-close" onclick="closeModal('modal-settings')">&times;</button>
       </div>
-      <div style="margin-bottom: 16px; font-size: 14px; color: #cbd5e1;">
-        "Welcome to the bar! How can I adjust your club experience today?"
+      <div class="setting-item">
+        <span>Purple Smoke Fog Density</span>
+        <input type="range" class="setting-slider" min="10" max="100" value="60" onchange="updateSmokeDensity(this.value)">
       </div>
       <div class="setting-item">
-        <div class="setting-label">Club Audio & Music Volume</div>
-        <input type="range" id="setting-volume" class="setting-slider" min="0" max="100" value="70" onchange="updateAudioVolume(this.value)">
-      </div>
-      <div class="setting-item">
-        <div class="setting-label">Purple Smoke & Fog Density</div>
-        <input type="range" id="setting-smoke" class="setting-slider" min="10" max="100" value="60" onchange="updateSmokeDensity(this.value)">
-      </div>
-      <div class="setting-item">
-        <div class="setting-label">Hypnotic Slime Glow Intensity</div>
-        <input type="range" id="setting-slime" class="setting-slider" min="20" max="100" value="80" onchange="updateSlimeGlow(this.value)">
-      </div>
-      <div class="setting-item">
-        <div class="setting-label">Player Movement Speed</div>
-        <input type="range" id="setting-speed" class="setting-slider" min="5" max="25" value="12" onchange="updateMoveSpeed(this.value)">
+        <span>Purple Slime Glow Intensity</span>
+        <input type="range" class="setting-slider" min="20" max="100" value="80" onchange="updateSlimeGlow(this.value)">
       </div>
     </div>
   </div>
 
-  <!-- 3. VIP Section Drink Menu & Repositories Modal -->
   <div id="modal-vip-menu" class="modal-overlay">
-    <div class="modal-container" style="max-width: 750px;">
+    <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#22c55e;">🧪 Green Incredible Hulk Drink Menu</span> & Repositories
-        </div>
+        <div class="modal-title"><span style="color:#22c55e;">🧪 Green Incredible Hulk Drink Menu</span> & Repos</div>
         <button class="modal-close" onclick="closeModal('modal-vip-menu')">&times;</button>
       </div>
-      <div style="margin-bottom: 16px; font-size: 14px; color: #cbd5e1;">
-        Opening the VIP Drink Menu reveals the active codebase repositories across the Estate!
-      </div>
-
-      <!-- Drink Special Feature -->
-      <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); padding: 12px; border-radius: 8px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 28px;">🍹</span>
-        <div>
-          <strong style="color: #4ade80;">VIP Special: Green Incredible Hulk Cocktail</strong>
-          <div style="font-size: 12px; color: #cbd5e1;">Hennessy + Hypnotiq + Glowing Green Slime Extract. Grants full repo access!</div>
-        </div>
-      </div>
-
       <div class="repo-card">
-        <div class="repo-title">
-          <span>🐙 PuffBase / puffbase-underground</span>
-          <span style="font-size: 12px; color: #a855f7;">GitHub • ⭐ 142</span>
-        </div>
-        <div class="repo-desc">Underground 3JS club with purple slime, purple smoke, Keycloak authentication, and live interactive zones.</div>
-        <div style="display:flex; gap:8px;">
-          <a href="https://github.com" target="_blank" class="btn-sm">View GitHub Repo</a>
-          <button class="btn-sm" onclick="copyRepoUrl('https://github.com/PuffBase/puffbase-underground.git')">Copy HTTPS URL</button>
+        <div class="repo-title"><span>PuffBase / puffbase-underground</span><span>GitHub ⭐ 142</span></div>
+        <div style="margin-top:8px;">
+          <a href="https://github.com" target="_blank" class="btn-sm">View GitHub</a>
+          <button class="btn-sm" onclick="copyRepoUrl('https://github.com/PuffBase/puffbase-underground.git')">Copy HTTPS</button>
         </div>
       </div>
-
       <div class="repo-card">
-        <div class="repo-title">
-          <span>🦊 diesel-tech / mansion-garage</span>
-          <span style="font-size: 12px; color: #f97316;">GitLab • ⭐ 98</span>
-        </div>
-        <div class="repo-desc">Grand Mansion Garage telemetry and diesel engine diagnostics suite.</div>
-        <div style="display:flex; gap:8px;">
+        <div class="repo-title"><span>diesel-tech / mansion-garage</span><span>GitLab ⭐ 98</span></div>
+        <div style="margin-top:8px;">
           <a href="https://gbonds1.gitlab.io/diesel.tech/" target="_blank" class="btn-sm">View Live App</a>
-          <button class="btn-sm" onclick="copyRepoUrl('https://gitlab.com/gbonds1/diesel.tech.git')">Copy Git URL</button>
-        </div>
-      </div>
-
-      <div class="repo-card">
-        <div class="repo-title">
-          <span>🛡️ security / crowdsec-suricata-stack</span>
-          <span style="font-size: 12px; color: #38bdf8;">GitHub • ⭐ 84</span>
-        </div>
-        <div class="repo-desc">CrowdSec Bouncer & Suricata Guard Post integration scripts for estate perimeter security.</div>
-        <div style="display:flex; gap:8px;">
-          <a href="https://github.com" target="_blank" class="btn-sm">View Repository</a>
-          <button class="btn-sm" onclick="copyRepoUrl('https://github.com/tech-estate/security-stack.git')">Copy HTTPS URL</button>
+          <button class="btn-sm" onclick="copyRepoUrl('git@gitlab.com:gbonds1/diesel.tech.git')">Copy Git SSH</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 4. Dance Floor Code Editor Modal -->
   <div id="modal-code-editor" class="modal-overlay">
-    <div class="modal-container" style="max-width: 800px;">
+    <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#c084fc;">🪩 Dance Floor Code Editor</span>
-        </div>
+        <div class="modal-title"><span style="color:#c084fc;">🪩 Dance Floor Code Editor</span></div>
         <button class="modal-close" onclick="closeModal('modal-code-editor')">&times;</button>
       </div>
-      <div style="margin-bottom: 12px; font-size: 14px; color: #cbd5e1;">
-        You walked onto the dance floor! Edit live configuration code while dancing:
-      </div>
-      <div class="code-container" id="editor-code-box" contenteditable="true" spellcheck="false">// PuffBase Underground Clubhouse - Live Config
-const PuffBaseClub = {
-  theme: "Purple Slime & Oozing Goop",
-  smokeEffect: "Dense Hypnotic Purple Fog",
-  signatureDrink: "Green Incredible Hulk",
-  bouncer: "CrowdSec (Keycloak SSO Enabled)",
-  bartender: "Interactive Settings Manager",
-  securityGuard: "Suricata NIDS",
-  frontGate: "HAProxy Guard Post",
-  butler: "ser.ops System Automation",
-  garage: "diesel.tech",
-  store: "Barcode Scanner Service",
-
-  danceFloorActive: true,
-  currentTrack: "Hypnotic Synthwave BPM 128",
-
-  getStatus: function() {
-    return `[PuffBase] Status: ALL SYSTEMS OPERATIONAL`;
-  }
+      <div class="code-container" contenteditable="true">// PuffBase Club - Dance Floor Editor
+const PuffBase = {
+  theme: "Purple Slime & Smoke",
+  drink: "Green Incredible Hulk",
+  status: "ONLINE"
 };
-
-console.log(PuffBaseClub.getStatus());</div>
-      <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
-        <button class="btn-primary" style="width: auto; padding: 8px 24px;" onclick="runEditorCode()">▶ Execute Code</button>
-        <span id="editor-status" style="font-size: 12px; color: #4ade80;">Status: Ready to edit</span>
-      </div>
+console.log(PuffBase);</div>
+      <button class="btn-primary" style="margin-top:14px;" onclick="alert('Executed Code!')">Run Code</button>
     </div>
   </div>
 
-  <!-- 5. Bathroom Mirror Git Clone Modal -->
   <div id="modal-mirror" class="modal-overlay">
     <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title">
-          <span style="color:#38bdf8;">🪞 Bathroom Mirror</span> - Git Clone URL Generator
-        </div>
+        <div class="modal-title"><span style="color:#38bdf8;">🪞 Bathroom Mirror</span> - Git Clone URL</div>
         <button class="modal-close" onclick="closeModal('modal-mirror')">&times;</button>
       </div>
-      <div style="margin-bottom: 16px; font-size: 14px; color: #cbd5e1;">
-        Looking into the glowing bathroom mirror reflects your Git & HTTPS clone endpoints:
-      </div>
-
-      <div style="margin-bottom: 12px;">
-        <label style="font-size: 12px; color: #c084fc;">GitHub HTTPS Clone URL:</label>
-        <div class="clone-box">
-          <span class="clone-url">https://github.com/PuffBase/puffbase-club.git</span>
-          <button class="btn-sm" onclick="copyRepoUrl('https://github.com/PuffBase/puffbase-club.git')">Copy</button>
-        </div>
-      </div>
-
-      <div style="margin-bottom: 12px;">
-        <label style="font-size: 12px; color: #c084fc;">GitLab SSH Clone URL:</label>
-        <div class="clone-box">
-          <span class="clone-url">git@gitlab.com:gbonds1/diesel.tech.git</span>
-          <button class="btn-sm" onclick="copyRepoUrl('git@gitlab.com:gbonds1/diesel.tech.git')">Copy</button>
-        </div>
-      </div>
-
-      <div style="font-size: 12px; color: #94a3b8; margin-top: 14px;">
-        💡 Tip: Paste into your terminal using <code>git clone &lt;URL&gt;</code> to download repository source code instantly.
+      <div class="clone-box">
+        <span class="clone-url">https://github.com/PuffBase/puffbase-club.git</span>
+        <button class="btn-sm" onclick="copyRepoUrl('https://github.com/PuffBase/puffbase-club.git')">Copy</button>
       </div>
     </div>
   </div>
 
-  <!-- Three.js Module Import -->
   <script type="module">
     import * as THREE from "https://esm.sh/three@0.185.1";
     import { PointerLockControls } from "https://esm.sh/three@0.185.1/examples/jsm/controls/PointerLockControls.js";
 
     // --- Scene Setup ---
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x05020a);
-    scene.fog = new THREE.FogExp2(0x1a062e, 0.03); // Hypnotic purple fog
+    scene.background = new THREE.Color(0x0a0d14);
+    scene.fog = new THREE.FogExp2(0x1a062e, 0.012);
+    let fogIndoor = 0.012;
 
-    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 300);
-    camera.position.set(0, 1.7, 10);
+    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 700);
+    camera.position.set(-9, 1.7, 9);   // beside the card table, looking into the foyer
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(innerWidth, innerHeight);
@@ -584,174 +416,325 @@ console.log(PuffBaseClub.getStatus());</div>
     const promptEl = document.getElementById("prompt");
     const promptTextEl = document.getElementById("prompt-text");
 
-    start.addEventListener("click", () => {
-      controls.lock();
-    });
+    start.addEventListener("click", () => controls.lock());
+    controls.addEventListener("lock", () => start.style.display = "none");
+    controls.addEventListener("unlock", () => start.style.display = "grid");
 
-    controls.addEventListener("lock", () => {
-      start.style.display = "none";
-    });
-
-    controls.addEventListener("unlock", () => {
-      start.style.display = "grid";
-    });
-
-    // Audio volume & player speed
-    let playerSpeed = 0.12;
-
-    // --- Global Lights ---
-    const ambientLight = new THREE.AmbientLight(0xd8b4fe, 0.6);
+    // --- Ambient & Chandelier Lighting ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    // Foyer Main Light
-    const foyerLight = new THREE.PointLight(0xa855f7, 80, 25);
+    const foyerLight = new THREE.PointLight(0xffecd1, 400, 45);
     foyerLight.position.set(0, 7, 0);
+    foyerLight.castShadow = true;
     scene.add(foyerLight);
 
-    // --- Interactive Objects Register ---
-    const interactiveObjects = [];
+    // Decorative Chandelier Geometry
+    const chandelierGroup = new THREE.Group();
+    chandelierGroup.position.set(0, 7.5, 0);
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.2 });
+    const ringGeo = new THREE.TorusGeometry(2, 0.08, 16, 32);
+    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringMesh.rotation.x = Math.PI / 2;
+    chandelierGroup.add(ringMesh);
+
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2;
+      const bulbGeo = new THREE.SphereGeometry(0.15, 16, 16);
+      const bulbMat = new THREE.MeshBasicMaterial({ color: 0xfff4d6 });
+      const bulb = new THREE.Mesh(bulbGeo, bulbMat);
+      bulb.position.set(Math.cos(angle) * 2, -0.2, Math.sin(angle) * 2);
+      chandelierGroup.add(bulb);
+    }
+    scene.add(chandelierGroup);
 
     // Materials
-    const floorMat = new THREE.MeshStandardMaterial({ color: 0x180b28, roughness: 0.4 });
-    const wallMat = new THREE.MeshStandardMaterial({ color: 0x271042, roughness: 0.6 });
-    const doorMat = new THREE.MeshStandardMaterial({ color: 0x4a1d6d, roughness: 0.3 });
-    const goldMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8, roughness: 0.2 });
+    const foyerFloorMat = new THREE.MeshStandardMaterial({ color: 0x5a4636, roughness: 0.3, metalness: 0.1 });
+    const foyerWallMat = new THREE.MeshStandardMaterial({ color: 0xa8957c, roughness: 0.7 });
+    const hallwayFloorMat = new THREE.MeshStandardMaterial({ color: 0x4a4f5a, roughness: 0.4 });
+    const hallwayWallMat = new THREE.MeshStandardMaterial({ color: 0x8c93a3, roughness: 0.6 });
+    const doorMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.4, metalness: 0.2 });
+    const handleMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.1 });
+    const tableWoodMat = new THREE.MeshStandardMaterial({ color: 0x2b1810, roughness: 0.5 });
+    const feltMat = new THREE.MeshStandardMaterial({ color: 0x106b38, roughness: 0.8 });
+    const slimeMat = new THREE.MeshStandardMaterial({ color: 0x22c55e, emissive: 0x15803d, emissiveIntensity: 0.8, roughness: 0.1, transparent: true, opacity: 0.85 });
 
-    // Slime Material - Oozing Glowing Green / Purple Goop
-    const slimeMat = new THREE.MeshStandardMaterial({
-      color: 0x22c55e,
-      emissive: 0x15803d,
-      emissiveIntensity: 0.8,
-      roughness: 0.1,
-      transparent: true,
-      opacity: 0.85
-    });
+    const interactiveDoors = [];
 
-    const hulkDrinkMat = new THREE.MeshStandardMaterial({
-      color: 0x4ade80,
-      emissive: 0x22c55e,
-      emissiveIntensity: 1.2,
-      roughness: 0.1
-    });
+    // Solid boxes you can't walk through: centre, half width/depth, y span,
+    // rotation about y. Anything thinner than head height above/below you is ignored.
+    const solids = [];
+    function addSolid(x, z, w, d, y0, y1, rot = 0) {
+      const s = { x, z, hw: w / 2, hd: d / 2, y0, y1, c: Math.cos(rot), s: Math.sin(rot), on: true };
+      solids.push(s);
+      return s;
+    }
 
-    function createWall(x, y, z, w, h, d, mat = wallMat) {
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    function addRound(x, z, rx, rz, y0, y1) {
+      const s = { round: true, x, z, rx, rz, y0, y1, on: true };
+      solids.push(s);
+      return s;
+    }
+
+    function createWall(x, y, z, w, h, d, material = foyerWallMat) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
       mesh.position.set(x, y, z);
       mesh.receiveShadow = true;
       mesh.castShadow = true;
       scene.add(mesh);
+      addSolid(x, z, w, d, y - h / 2, y + h / 2);
       return mesh;
     }
 
     // ==========================================
-    // 1. UPPER LEVEL - MANSION FOYER & ROOMS
+    // 1. CENTRAL FOYER (Playing Area & Games)
     // ==========================================
-    // Foyer floor with stairwell opening (x: -2..2, z: -1.5..0.5)
-    const foyerSlabs = [
-      [0, -6.75, 24, 10.5],
-      [0, 6.25, 24, 11.5],
-      [-7, -0.5, 10, 2],
-      [7, -0.5, 10, 2],
-    ];
-    for (const [fx, fz, fw, fd] of foyerSlabs) {
-      const slab = new THREE.Mesh(new THREE.BoxGeometry(fw, 0.2, fd), floorMat);
+    // foyer floor, with the opening for the club stairwell (x -2.3..2.3, z -10.25..0.25)
+    for (const [fx, fz, fw, fd] of [[0, 7.625, 30, 14.75], [0, -12.625, 30, 4.75], [-8.65, -5, 12.7, 10.5], [8.65, -5, 12.7, 10.5]]) {
+      const slab = new THREE.Mesh(new THREE.BoxGeometry(fw, 0.2, fd), foyerFloorMat);
       slab.position.set(fx, -0.1, fz);
+      slab.receiveShadow = true;
       scene.add(slab);
     }
 
-    // Stairwell guard rails — entry is the south face only
-    createWall(-2.1, 0.5, -0.5, 0.15, 1.0, 2.1, goldMat);
-    createWall(2.1, 0.5, -0.5, 0.15, 1.0, 2.1, goldMat);
-    createWall(0, 0.5, -1.55, 4.4, 1.0, 0.15, goldMat);
-
-    const foyerCeiling = new THREE.Mesh(new THREE.BoxGeometry(24, 0.2, 24), wallMat);
-    foyerCeiling.position.set(0, 8, 0);
+    const foyerCeiling = new THREE.Mesh(new THREE.BoxGeometry(30, 0.2, 30), foyerWallMat);
+    foyerCeiling.position.set(0, 14, 0);
     scene.add(foyerCeiling);
 
-    // Walls
-    createWall(-12, 4, 0, 0.4, 8, 24); // West Wall
-    createWall(12, 4, 0, 0.4, 8, 24);  // East Wall
-    createWall(0, 4, 12, 24, 8, 0.4);   // South Wall (Front Gate / Entrance)
+    createWall(-8.5, 7, 15, 13, 14, 0.4);
+    createWall(8.5, 7, 15, 13, 14, 0.4);
+    createWall(-15, 7, 0, 0.4, 14, 30);
+    // right wall, with an opening into the Vana Mõis long hallway (z -8.8 .. -3.2)
+    createWall(15, 7, -11.9, 0.4, 14, 6.2);
+    createWall(15, 7, 5.9, 0.4, 14, 18.2);
+    createWall(15, 9.6, -6, 0.4, 8.8, 5.6);
+    createWall(-9.5, 7, -15, 11, 14, 0.4);
+    createWall(9.5, 7, -15, 11, 14, 0.4);
 
-    // HAProxy Front Gate Guard Post (South Entrance)
+    // Front Door & HAProxy Front Gate
     const frontGate = new THREE.Group();
-    frontGate.position.set(0, 0, 11.5);
-    const gateSign = new THREE.Mesh(new THREE.BoxGeometry(3, 1, 0.2), goldMat);
-    gateSign.position.set(0, 4, 0);
-    frontGate.add(gateSign);
-    frontGate.userData = { name: "HAProxy Front Gate Guard Post", type: "info", infoText: "HAProxy Load Balancer & Front Gate Guard Post operational." };
+    frontGate.position.set(0, 0, 14.8);
+    const gatePanel = new THREE.Mesh(new THREE.BoxGeometry(4, 6, 0.2), doorMat);
+    gatePanel.position.set(2, 3, 0);
+    const gateHinge = new THREE.Group();
+    gateHinge.position.x = -2;
+    gateHinge.add(gatePanel);
+    frontGate.add(gateHinge);
+    frontGate.userData = { isDoor: true, name: "HAProxy Front Gate Guard Post", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
     scene.add(frontGate);
-    interactiveObjects.push(frontGate);
+    const frontDoor = { hinge: gateHinge, open: 0, solid: addSolid(0, 14.8, 4, 0.2, 0, 6) };
+    interactiveDoors.push(frontGate);
 
-    // Butler (ser.ops) Station in Foyer
-    const butlerGroup = new THREE.Group();
-    butlerGroup.position.set(6, 0, 6);
-    const butlerBody = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.5, 1.8, 16), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
-    butlerBody.position.y = 0.9;
-    butlerGroup.add(butlerBody);
-    const butlerHead = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), goldMat);
-    butlerHead.position.y = 2.0;
-    butlerGroup.add(butlerHead);
-    butlerGroup.userData = { name: "ser.ops Butler", type: "info", infoText: "Butler ser.ops: 'Welcome, sir. All automated estate operations are running smooth.'" };
-    scene.add(butlerGroup);
-    interactiveObjects.push(butlerGroup);
+    // Center Card Game Table
+    const centerTableGroup = new THREE.Group();
+    centerTableGroup.position.set(0, 0, 7);   // clear of the club stairwell
+    const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.5, 0.2, 32), feltMat);
+    tableTop.position.y = 1.0;
+    tableTop.scale.set(1.4, 1, 1);
+    centerTableGroup.add(tableTop);
+    const tableBase = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 1.2, 1.0, 16), tableWoodMat);
+    tableBase.position.y = 0.5;
+    centerTableGroup.add(tableBase);
 
-    // Upstairs Room Doorways in Hallway (North)
-    createWall(-8, 4, -12, 8, 8, 0.4);
-    createWall(8, 4, -12, 8, 8, 0.4);
-
-    // Hallway connecting rooms
-    const hallwayFloor = new THREE.Mesh(new THREE.BoxGeometry(8, 0.2, 40), floorMat);
-    hallwayFloor.position.set(0, -0.1, -32);
-    scene.add(hallwayFloor);
-
-    // Hallway enclosure: side walls, ceiling, end wall, mouth lintel
-    createWall(-4.1, 4, -32, 0.4, 8, 40);
-    createWall(4.1, 4, -32, 0.4, 8, 40);
-    createWall(0, 4, -52, 8.6, 8, 0.4);
-    createWall(0, 6.5, -12, 8, 3, 0.4);
-    const hallwayCeiling = new THREE.Mesh(new THREE.BoxGeometry(8.6, 0.2, 40), wallMat);
-    hallwayCeiling.position.set(0, 8, -32);
-    scene.add(hallwayCeiling);
-
-    for (let z of [-18, -32, -46]) {
-      const hLight = new THREE.PointLight(0xd8b4fe, 50, 14);
-      hLight.position.set(0, 6.5, z);
-      scene.add(hLight);
+    // Cards & Chips
+    const cardGeo = new THREE.BoxGeometry(0.25, 0.01, 0.35);
+    const cardColors = [0xffffff, 0xd90429, 0xffffff, 0x111111];
+    for (let i = 0; i < 12; i++) {
+      const cardMat = new THREE.MeshBasicMaterial({ color: cardColors[i % cardColors.length] });
+      const card = new THREE.Mesh(cardGeo, cardMat);
+      const angle = (i / 12) * Math.PI * 2;
+      card.position.set(Math.cos(angle) * 2.2, 1.11, Math.sin(angle) * 1.5);
+      centerTableGroup.add(card);
     }
-
-    // Dedicated Rooms along Hallway
-    function addRoom(x, z, title, url, colorHex = 0xa855f7) {
-      const roomDoor = new THREE.Group();
-      roomDoor.position.set(x, 0, z);
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(0.2, 3.5, 2.2), new THREE.MeshStandardMaterial({ color: colorHex }));
-      frame.position.y = 1.75;
-      roomDoor.add(frame);
-      roomDoor.userData = { name: title, type: "link", url: url };
-      scene.add(roomDoor);
-      interactiveObjects.push(roomDoor);
+    for (let i = 0; i < 20; i++) {
+      const chipGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.04, 16);
+      const chipColors = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0xffffff];
+      const chipStack = new THREE.Mesh(chipGeo, new THREE.MeshStandardMaterial({ color: chipColors[i % chipColors.length] }));
+      chipStack.position.set((Math.random() - 0.5) * 2.5, 1.12 + (i % 4) * 0.04, (Math.random() - 0.5) * 1.8);
+      centerTableGroup.add(chipStack);
     }
+    scene.add(centerTableGroup);
+    addRound(0, 7, 3.5 * 1.4, 3.5, 0, 1.1);
 
-    addRoom(-4.1, -20, "Wazuh Security Command Room", "https://github.com", 0x38bdf8);
-    addRoom(4.1, -20, "Suricata NIDS Security Guard Post", "https://github.com", 0xef4444);
-    addRoom(-4.1, -30, "Forge Workshop & Lab", "https://github.com", 0xf59e0b);
-    addRoom(4.1, -30, "Barcode Scanner Estate Store", "https://github.com", 0x10b981);
-    addRoom(-4.1, -40, "Odoo ERP Suite Room", "https://github.com", 0xa855f7);
-    addRoom(4.1, -40, "Magento2 E-Commerce Room", "https://github.com", 0xec4899);
+    // Chess Table (Left)
+    const chessTableGroup = new THREE.Group();
+    chessTableGroup.position.set(-8, 0, -5);
+    const cTableTop = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.15, 2.2), tableWoodMat);
+    cTableTop.position.y = 1.0;
+    chessTableGroup.add(cTableTop);
+    scene.add(chessTableGroup);
+    addSolid(-8, -5, 2.2, 2.2, 0, 1.1);
 
-    // Mansion Garage (diesel.tech) at end of Hallway (Z = -52)
-    const garageDoor = new THREE.Group();
-    garageDoor.position.set(0, 0, -51.8);
-    const gPanel = new THREE.Mesh(new THREE.BoxGeometry(6, 4, 0.3), new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8 }));
-    gPanel.position.y = 2;
-    garageDoor.add(gPanel);
-    garageDoor.userData = { name: "Grand Garage (diesel.tech)", type: "link", url: "https://gbonds1.gitlab.io/diesel.tech/" };
-    scene.add(garageDoor);
-    interactiveObjects.push(garageDoor);
+    // Arcade Game Station (Right)
+    const arcadeGroup = new THREE.Group();
+    arcadeGroup.position.set(8, 0, -5);
+    const arcadeBody = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.4, 1.2), new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.4 }));
+    arcadeBody.position.y = 1.2;
+    arcadeGroup.add(arcadeBody);
+    const arcadeScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.9), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
+    arcadeScreen.position.set(0, 1.6, 0.61);
+    arcadeGroup.add(arcadeScreen);
+    scene.add(arcadeGroup);
+    addSolid(8, -5, 1.6, 1.2, 0, 2.4);
 
 
     // ==========================================
-    // 2. PUFFBASE UNDERGROUND CLUBHOUSE
+    // 1B. HUGE 2ND FLOOR BALCONY
+    // ==========================================
+    const balconyFloorMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.2 });
+    const balconyFloor = new THREE.Mesh(new THREE.BoxGeometry(28, 0.3, 12), balconyFloorMat);
+    balconyFloor.position.set(0, 7.0, 8.0);
+    scene.add(balconyFloor);
+
+    for (let x = -13; x <= 13; x += 1.2) {
+      const baluster = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 1.0, 12), handleMat);
+      baluster.position.set(x, 7.7, 2.1);
+      scene.add(baluster);
+    }
+
+    addSolid(-2.5, 2.1, 21, 0.25, 7.15, 8.2);
+
+    const balconyStairsGroup = new THREE.Group();
+    for (let i = 0; i < 22; i++) {
+      const step = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.32, 0.6), balconyFloorMat);
+      step.position.set(10.5, 0.16 + i * 0.32, 12.5 - i * 0.5);
+      balconyStairsGroup.add(step);
+    }
+    scene.add(balconyStairsGroup);
+
+
+    // ==========================================
+    // 2. V-SHAPED HALLWAY (18 Doors Per Wing)
+    // ==========================================
+    const wingLength = 72;
+    const wingWidth = 8;
+    const wingAngle = Math.PI / 7;
+    const wingStart = new THREE.Vector3(0, 0, -19);
+    const wingDirections = [
+      new THREE.Vector3(-Math.sin(wingAngle), 0, -Math.cos(wingAngle)),
+      new THREE.Vector3(Math.sin(wingAngle), 0, -Math.cos(wingAngle))
+    ];
+
+    function addWing(direction, side) {
+      const center = wingStart.clone().add(direction.clone().multiplyScalar(wingLength / 2));
+      const angle = Math.atan2(direction.x, -direction.z);
+      const floor = new THREE.Mesh(new THREE.BoxGeometry(wingWidth, 0.2, wingLength), hallwayFloorMat);
+      floor.position.copy(center);
+      floor.rotation.y = angle;
+      scene.add(floor);
+
+      const wallOffset = wingWidth / 2;
+      for (const offset of [-wallOffset, wallOffset]) {
+        const wall = new THREE.Mesh(new THREE.BoxGeometry(0.2, 8, wingLength), hallwayWallMat);
+        const wallPos = center.clone().add(new THREE.Vector3(Math.cos(angle) * offset, 4, Math.sin(angle) * offset));
+        wall.position.copy(wallPos);
+        wall.rotation.y = angle;
+        scene.add(wall);
+        addSolid(wallPos.x, wallPos.z, 0.2, wingLength, 0, 8, angle);
+      }
+
+      const roomNames = ["Wazuh Security Command", "Suricata Guard Post", "Forge Lab", "Barcode Scanner Store", "Odoo Suite", "Magento2 Store"];
+
+      for (let i = 0; i < 9; i++) {
+        const distance = 8 + i * 7.1;
+        const doorPos = wingStart.clone().add(direction.clone().multiplyScalar(distance));
+        const outward = side === "left" ? new THREE.Vector3(-Math.cos(angle), 0, -Math.sin(angle)) : new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
+
+        const name = roomNames[i % roomNames.length];
+        addHallwayDoor(doorPos.x + outward.x * (wallOffset - 0.05), doorPos.z + outward.z * (wallOffset - 0.05), side, name);
+      }
+    }
+
+    function addHallwayDoor(x, z, side, labelText) {
+      const doorGroup = new THREE.Group();
+      doorGroup.position.set(x, 0, z);
+      doorGroup.rotation.y = side === "left" ? -wingAngle : wingAngle;
+
+      const panel = new THREE.Mesh(new THREE.BoxGeometry(0.1, 3.1, 1.7), doorMat);
+      panel.position.set(0, 1.55, 0);
+      doorGroup.add(panel);
+
+      doorGroup.userData = { isDoor: true, name: labelText, targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+      scene.add(doorGroup);
+      interactiveDoors.push(doorGroup);
+      addSolid(x, z, 0.1, 1.7, 0, 3.1, doorGroup.rotation.y);
+    }
+
+    for (const dir of wingDirections) {
+      for (let t = 10; t < wingLength; t += 12) {
+        const p = wingStart.clone().add(dir.clone().multiplyScalar(t));
+        const wl = new THREE.PointLight(0xffe4b5, 60, 16);
+        wl.position.set(p.x, 6.5, p.z); scene.add(wl);
+      }
+    }
+    addWing(wingDirections[0], "left");
+    addWing(wingDirections[1], "right");
+
+
+    // ==========================================
+    // 3. MANSION GARAGE (Grand 4x Scale Experience - diesel.tech)
+    // ==========================================
+    const garageFloorMat = new THREE.MeshStandardMaterial({ color: 0x3b4252, roughness: 0.1, metalness: 0.6 });
+    const garageWallMat = new THREE.MeshStandardMaterial({ color: 0x8a94a6, roughness: 0.4 });
+
+    const garageFloor = new THREE.Mesh(new THREE.BoxGeometry(60, 0.2, 80), garageFloorMat);
+    garageFloor.position.set(0, -0.1, -145);
+    scene.add(garageFloor);
+
+    createWall(-30, 11, -145, 0.4, 22, 80, garageWallMat);
+    createWall(30, 11, -145, 0.4, 22, 80, garageWallMat);
+    createWall(0, 11, -185, 60, 22, 0.4, garageWallMat);
+
+    // Pillars & Spotlights in Garage
+    const pillarGeo = new THREE.CylinderGeometry(1.2, 1.4, 22, 32);
+    const pillarMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
+    for (let z = -115; z >= -175; z -= 18) {
+      const pL = new THREE.Mesh(pillarGeo, pillarMat); pL.position.set(-26, 11, z); scene.add(pL);
+      const pR = new THREE.Mesh(pillarGeo, pillarMat); pR.position.set(26, 11, z); scene.add(pR);
+      addRound(-26, z, 1.4, 1.4, 0, 22);
+      addRound(26, z, 1.4, 1.4, 0, 22);
+    }
+
+    for (const [lx, lz] of [[-12, -125], [12, -125], [-12, -165], [12, -165]]) {
+      const gl = new THREE.PointLight(0xeef3ff, 200, 40);
+      gl.position.set(lx, 18, lz); scene.add(gl);
+    }
+
+    // 4 Supercars in Garage
+    function createSupercar(x, z, rot, color) {
+      const carGroup = new THREE.Group();
+      carGroup.position.set(x, 0, z);
+      carGroup.rotation.y = rot;
+
+      const bodyMat = new THREE.MeshStandardMaterial({ color: color, metalness: 0.9, roughness: 0.1 });
+      const lowerBody = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.7, 5.2), bodyMat);
+      lowerBody.position.y = 0.5;
+      carGroup.add(lowerBody);
+
+      const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.6, 2.6), new THREE.MeshStandardMaterial({ color: 0x0f172a }));
+      cabin.position.set(0, 1.0, -0.2);
+      carGroup.add(cabin);
+
+      scene.add(carGroup);
+      addSolid(x, z, 2.4, 5.2, 0, 1.3, rot);
+    }
+    createSupercar(-15, -135, Math.PI / 6, 0xd90429);  // Crimson Red
+    createSupercar(15, -135, -Math.PI / 6, 0x0284c7); // Electric Blue
+    createSupercar(-15, -165, Math.PI / 6, 0x15803d);  // Racing Green
+    createSupercar(15, -165, -Math.PI / 6, 0xeab308); // Gold Hypercar
+
+    const garageDoor = new THREE.Group();
+    garageDoor.position.set(0, 0, -104.8);
+    garageDoor.userData = { isDoor: true, name: "Mansion Garage Door (diesel.tech)", targetUrl: "https://gbonds1.gitlab.io/diesel.tech/" };
+    scene.add(garageDoor);
+    interactiveDoors.push(garageDoor);
+
+
+    const clubWallMat = new THREE.MeshStandardMaterial({ color: 0x271042, roughness: 0.6 });
+    const hulkDrinkMat = new THREE.MeshStandardMaterial({ color: 0x4ade80, emissive: 0x22c55e, emissiveIntensity: 1.2, roughness: 0.1 });
+
+    // ==========================================
+    // 4. PUFFBASE UNDERGROUND CLUBHOUSE (furnished club from main)
     // ==========================================
     // Stairwell in Center Foyer leading underground (Y: 0 -> -8, Z: 0 -> -15)
     const stairGroup = new THREE.Group();
@@ -769,18 +752,18 @@ console.log(PuffBaseClub.getStatus());</div>
     clubFloor.position.set(0, clubY - 0.1, -30);
     scene.add(clubFloor);
 
-    const clubCeiling = new THREE.Mesh(new THREE.BoxGeometry(40, 0.2, 40), wallMat);
+    const clubCeiling = new THREE.Mesh(new THREE.BoxGeometry(40, 0.2, 40), clubWallMat);
     clubCeiling.position.set(0, clubY + 6, -30);
     scene.add(clubCeiling);
 
     // Club Outer Walls
-    createWall(-20, clubY + 3, -30, 0.4, 6, 40); // West
-    createWall(20, clubY + 3, -30, 0.4, 6, 40);  // East
-    createWall(0, clubY + 3, -50, 40, 6, 0.4);   // North (Back Wall)
-    createWall(-11.1, clubY + 3, -10, 17.8, 6, 0.4);  // South, west of stair door
-    createWall(11.1, clubY + 3, -10, 17.8, 6, 0.4);   // South, east of stair door
-    createWall(-2.2, clubY + 3, -10, 0.3, 6, 0.6, goldMat); // Door posts
-    createWall(2.2, clubY + 3, -10, 0.3, 6, 0.6, goldMat);
+    createWall(-20, clubY + 3, -30, 0.4, 6, 40, clubWallMat); // West
+    createWall(20, clubY + 3, -30, 0.4, 6, 40, clubWallMat);  // East
+    createWall(0, clubY + 3, -50, 40, 6, 0.4, clubWallMat);   // North (Back Wall)
+    createWall(-11.1, clubY + 3, -10, 17.8, 6, 0.4, clubWallMat);  // South, west of stair door
+    createWall(11.1, clubY + 3, -10, 17.8, 6, 0.4, clubWallMat);   // South, east of stair door
+    createWall(-2.2, clubY + 3, -10, 0.3, 6, 0.6, handleMat); // Door posts
+    createWall(2.2, clubY + 3, -10, 0.3, 6, 0.6, handleMat);
 
     // Hypnotic Purple Lights in Club
     for (let x of [-10, 10]) {
@@ -830,9 +813,10 @@ console.log(PuffBaseClub.getStatus());</div>
     bouncerHead.position.y = 2.2;
     bouncerGroup.add(bouncerHead);
 
-    bouncerGroup.userData = { name: "CrowdSec Bouncer (Keycloak SSO)", type: "modal", modalId: "modal-keycloak" };
+    bouncerGroup.userData = { name: "CrowdSec Bouncer (Keycloak SSO)", isModal: true, modalId: "modal-keycloak" };
     scene.add(bouncerGroup);
-    interactiveObjects.push(bouncerGroup);
+    addSolid(0, -14, 0.8, 0.6, clubY, clubY + 2.5);
+    interactiveDoors.push(bouncerGroup);
 
     // --- 2. MAIN BAR & BARTENDER (Settings Menu) ---
     const barGroup = new THREE.Group();
@@ -855,9 +839,11 @@ console.log(PuffBaseClub.getStatus());</div>
       barGroup.add(drink);
     }
 
-    barGroup.userData = { name: "PuffBase Bartender (Settings Menu)", type: "modal", modalId: "modal-settings" };
+    barGroup.userData = { name: "PuffBase Bartender (Settings Menu)", isModal: true, modalId: "modal-settings" };
     scene.add(barGroup);
-    interactiveObjects.push(barGroup);
+    addSolid(-14, -30, 2.0, 10.0, clubY, clubY + 1.1);
+    addRound(-15, -30, 0.4, 0.4, clubY, clubY + 1.8);
+    interactiveDoors.push(barGroup);
 
     // --- 3. VIP SECTION (Green Incredible Hulk Drink Menu & Repositories) ---
     const vipGroup = new THREE.Group();
@@ -869,7 +855,7 @@ console.log(PuffBaseClub.getStatus());</div>
     vipGroup.add(couch);
 
     // Low VIP Table with Drink Menus & Hulk Drinks
-    const vipTable = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.5, 4.0), goldMat);
+    const vipTable = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.5, 4.0), handleMat);
     vipTable.position.set(-2.0, 0.25, 0);
     vipGroup.add(vipTable);
 
@@ -877,9 +863,11 @@ console.log(PuffBaseClub.getStatus());</div>
     vipDrink.position.set(-2.0, 0.68, 0);
     vipGroup.add(vipDrink);
 
-    vipGroup.userData = { name: "VIP Section (Green Incredible Hulk Drink Menu & Repos)", type: "modal", modalId: "modal-vip-menu" };
+    vipGroup.userData = { name: "VIP Section (Green Incredible Hulk Drink Menu & Repos)", isModal: true, modalId: "modal-vip-menu" };
     scene.add(vipGroup);
-    interactiveObjects.push(vipGroup);
+    addSolid(14, -30, 2.5, 8.0, clubY, clubY + 0.8);
+    addSolid(12, -30, 1.8, 4.0, clubY, clubY + 0.5);
+    interactiveDoors.push(vipGroup);
 
     // --- 4. DANCE FLOOR (Code Editor Overlay) ---
     const danceFloorGeo = new THREE.BoxGeometry(12, 0.05, 12);
@@ -891,9 +879,9 @@ console.log(PuffBaseClub.getStatus());</div>
     // Dance floor interaction trigger region
     const danceTriggerGroup = new THREE.Group();
     danceTriggerGroup.position.set(0, clubY, -30);
-    danceTriggerGroup.userData = { name: "Dance Floor (Open Code Editor)", type: "modal", modalId: "modal-code-editor" };
+    danceTriggerGroup.userData = { name: "Dance Floor (Open Code Editor)", isModal: true, modalId: "modal-code-editor" };
     scene.add(danceTriggerGroup);
-    interactiveObjects.push(danceTriggerGroup);
+    interactiveDoors.push(danceTriggerGroup);
 
     // --- 5. BATHROOM MIRROR (Git Clone URLs) ---
     const bathroomGroup = new THREE.Group();
@@ -904,143 +892,323 @@ console.log(PuffBaseClub.getStatus());</div>
     mirrorMesh.position.set(0, 2.0, 0);
     bathroomGroup.add(mirrorMesh);
 
-    bathroomGroup.userData = { name: "Bathroom Mirror (Tap to Copy Git Clone URLs)", type: "modal", modalId: "modal-mirror" };
+    bathroomGroup.userData = { name: "Bathroom Mirror (Tap to Copy Git Clone URLs)", isModal: true, modalId: "modal-mirror" };
     scene.add(bathroomGroup);
-    interactiveObjects.push(bathroomGroup);
+    interactiveDoors.push(bathroomGroup);
+
+
+    // stairwell shaft: guard rails in the foyer, walls on the way down
+    const railMat = handleMat;
+    for (const sx of [-2.3, 2.3]) {
+      const rail = new THREE.Mesh(new THREE.BoxGeometry(0.12, 1.0, 10.5), railMat);
+      rail.position.set(sx, 0.5, -5); scene.add(rail);
+      addSolid(sx, -5, 0.2, 10.5, clubY, 1.1);
+      const shaft = new THREE.Mesh(new THREE.BoxGeometry(0.2, -clubY, 10.5), clubWallMat);
+      shaft.position.set(sx, clubY / 2, -5); scene.add(shaft);
+    }
+    const backRail = new THREE.Mesh(new THREE.BoxGeometry(4.6, 1.0, 0.12), railMat);
+    backRail.position.set(0, 0.5, -10.2); scene.add(backRail);
+    addSolid(0, -10.2, 4.6, 0.2, 0, 1.1);
+
+    // ==========================================
+    // 4B. VANA MÕIS LONG HALLWAY -> DOUBLE DOORS -> GARAGE
+    // ==========================================
+    const HZ = -6, HH = 5.2, GH = 6, DH = 4.2, DW = 1.8;
+    const brassMat = handleMat;
+    const hallFloor = new THREE.Mesh(new THREE.BoxGeometry(30, 0.2, 5.6), new THREE.MeshStandardMaterial({ color: 0x4a3524, roughness: 0.5 }));
+    hallFloor.position.set(30, -0.1, HZ); hallFloor.receiveShadow = true; scene.add(hallFloor);
+    const runner = new THREE.Mesh(new THREE.BoxGeometry(29, 0.02, 1.8), new THREE.MeshStandardMaterial({ color: 0x6b1f1f, roughness: 0.9 }));
+    runner.position.set(30, 0.01, HZ); scene.add(runner);
+    const hallWallMat = new THREE.MeshStandardMaterial({ color: 0x8a7a64, roughness: 0.8 });
+    createWall(30, HH + 0.05, HZ, 30, 0.1, 5.6, hallWallMat);
+    createWall(30, HH / 2, HZ - 2.8, 30, HH, 0.3, hallWallMat);
+    createWall(30, HH / 2, HZ + 2.8, 30, HH, 0.3, hallWallMat);
+    for (let x = 18; x <= 42; x += 6) {
+      for (const side of [-1, 1]) {
+        const sc = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.25, 0.15), brassMat);
+        sc.position.set(x, 3.0, HZ + side * 2.6); scene.add(sc);
+      }
+      const l = new THREE.PointLight(0xffd9a0, 30, 12);
+      l.position.set(x, 4.2, HZ); scene.add(l);
+    }
+
+    // garage behind the doors (x 45 .. 69)
+    const gConcrete = new THREE.MeshStandardMaterial({ color: 0x8a8a86, roughness: 0.95 });
+    const gWall = new THREE.MeshStandardMaterial({ color: 0xb9b4aa, roughness: 0.9 });
+    const gFloor = new THREE.Mesh(new THREE.BoxGeometry(24.2, 0.2, 22.2), gConcrete);
+    gFloor.position.set(57, -0.1, HZ); gFloor.receiveShadow = true; scene.add(gFloor);
+    createWall(57, GH + 0.05, HZ, 24.2, 0.1, 22.2, gWall);
+    createWall(45, GH / 2, HZ - 6.4, 0.3, GH, 9.2, gWall);
+    createWall(45, GH / 2, HZ + 6.4, 0.3, GH, 9.2, gWall);
+    createWall(45, (DH + GH) / 2, HZ, 0.3, GH - DH, 3.6, gWall);
+    createWall(69, GH / 2, HZ - 7.45, 0.3, GH, 7.3, gWall);
+    createWall(69, GH / 2, HZ + 7.45, 0.3, GH, 7.3, gWall);
+    createWall(69, (4.6 + GH) / 2, HZ, 0.3, GH - 4.6, 7.6, gWall);
+    createWall(57, GH / 2, HZ - 11, 24.2, GH, 0.3, gWall);
+    createWall(57, GH / 2, HZ + 11, 24.2, GH, 0.3, gWall);
+    const rollMat = new THREE.MeshStandardMaterial({ color: 0x9aa3ab, roughness: 0.5, metalness: 0.4 });
+    const rollDoor = new THREE.Group(); scene.add(rollDoor);
+    for (let i = 0; i < 14; i++) {
+      const slat = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.3, 7.6), rollMat);
+      slat.position.set(68.8, 0.2 + i * 0.32, HZ); rollDoor.add(slat);
+    }
+    const tubeMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xf2f6ff, emissiveIntensity: 2 });
+    for (const [lx, lz] of [[51, -5], [51, 5], [63, -5], [63, 5]]) {
+      const tube = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.08, 0.2), tubeMat);
+      tube.position.set(lx, GH - 0.1, HZ + lz); scene.add(tube);
+      const gl = new THREE.PointLight(0xeef3ff, 60, 26);
+      gl.position.set(lx, GH - 0.4, HZ + lz); scene.add(gl);
+    }
+    createSupercar(55, HZ - 5.5, Math.PI / 2, 0x111111);
+    createSupercar(55, HZ + 5.5, Math.PI / 2, 0x902322);
+    createWall(67.2, 0.5, HZ - 8, 1.2, 1.0, 3.6, tableWoodMat);
+
+    // the huge double doors: each leaf hinges on its outer edge and swings
+    // into the garage when you walk up the hallway to them
+    const gDoorMat = new THREE.MeshStandardMaterial({ color: 0x5a3b1e, roughness: 0.6 });
+    function garageLeaf(hingeZ, dir) {
+      const g = new THREE.Group();
+      const panel = new THREE.Mesh(new THREE.BoxGeometry(0.16, DH, DW), gDoorMat);
+      panel.position.set(0, DH / 2, dir * DW / 2); panel.castShadow = true; g.add(panel);
+      for (const y of [1.1, 3.0]) {
+        const inset = new THREE.Mesh(new THREE.BoxGeometry(0.18, 1.4, DW - 0.5), doorMat);
+        inset.position.set(0, y, dir * DW / 2); g.add(inset);
+      }
+      const pull = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.9, 0.08), brassMat);
+      pull.position.set(-0.14, 1.4, dir * (DW - 0.22)); g.add(pull);
+      g.position.set(45, 0, HZ + hingeZ);
+      scene.add(g);
+      return g;
+    }
+    const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 3.9), brassMat);
+    doorFrame.position.set(44.8, DH + 0.15, HZ); scene.add(doorFrame);
+    const garageDoors = { left: garageLeaf(-1.8, 1), right: garageLeaf(1.8, -1), open: 0, solid: addSolid(45, HZ, 0.3, 3.6, 0, DH) };
+    const doorGlow = new THREE.PointLight(0xffc27a, 20, 10);
+    doorGlow.position.set(43.5, 3.2, HZ); scene.add(doorGlow);
+    const doorClock = new THREE.Clock();
+    const roll = { group: rollDoor, open: 0, solid: addSolid(68.8, HZ, 0.3, 7.6, 0, 4.6) };
 
 
     // ==========================================
-    // 3. PLAYER MOVEMENT & INTERACTION LOGIC
+    // 4C. OUTDOORS - grounds around the house
+    // ==========================================
+    scene.add(new THREE.HemisphereLight(0xbfd8ff, 0x3a5a2a, 0.9));
+    // grass everywhere except over the club stairwell
+    const grassMat = new THREE.MeshStandardMaterial({ color: 0x4f7a3a, roughness: 1 });
+    for (const [gx, gz, gw, gd] of [[10, 120.125, 600, 239.75], [10, -185.125, 600, 349.75], [-146.15, -5, 287.7, 10.5], [156.15, -5, 307.7, 10.5]]) {
+      const grass = new THREE.Mesh(new THREE.PlaneGeometry(gw, gd), grassMat);
+      grass.rotation.x = -Math.PI / 2;
+      grass.position.set(gx, -0.02, gz);
+      grass.receiveShadow = true;
+      scene.add(grass);
+    }
+
+    // gravel drive from the front door, and one round to the garage roll-up door
+    const gravelMat = new THREE.MeshStandardMaterial({ color: 0xb8ad98, roughness: 1 });
+    const drive = new THREE.Mesh(new THREE.BoxGeometry(6, 0.04, 45), gravelMat);
+    drive.position.set(0, 0, 37.5); scene.add(drive);
+    const sideDrive = new THREE.Mesh(new THREE.BoxGeometry(7, 0.04, 75), gravelMat);
+    sideDrive.position.set(74, 0, 22); scene.add(sideDrive);
+    const apron = new THREE.Mesh(new THREE.BoxGeometry(78, 0.04, 6), gravelMat);
+    apron.position.set(35, 0, 60); scene.add(apron);
+
+    // lamp posts along the drive
+    const postMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.6, roughness: 0.4 });
+    const globeMat = new THREE.MeshStandardMaterial({ color: 0xfff1c9, emissive: 0xffd98a, emissiveIntensity: 1.5 });
+    for (const [lx, lz] of [[-4.5, 22], [4.5, 22], [-4.5, 40], [4.5, 40], [70, 10], [70, 40]]) {
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.14, 4, 10), postMat);
+      post.position.set(lx, 2, lz); scene.add(post);
+      const globe = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 12), globeMat);
+      globe.position.set(lx, 4.2, lz); scene.add(globe);
+      const pl = new THREE.PointLight(0xffd98a, 40, 18);
+      pl.position.set(lx, 4.0, lz); scene.add(pl);
+      addRound(lx, lz, 0.15, 0.15, 0, 4.5);
+    }
+
+    // where the house stands (used for trees and for indoor/outdoor fog)
+    const wingTan = Math.tan(wingAngle);
+    function inHouse(x, z, pad = 0) {
+      if (Math.abs(x) < 15 + pad && Math.abs(z) < 15 + pad) return true;                     // foyer
+      if (x > 15 - pad && x < 69 + pad && Math.abs(z - HZ) < (x > 45 ? 11 : 2.8) + pad) return true; // hallway + garage
+      if (Math.abs(x) < 30 + pad && z < -105 + pad && z > -185 - pad) return true;          // diesel.tech garage
+      if (z < -15 + pad && z > -19 - wingLength * Math.cos(wingAngle) - pad) {               // V wings
+        const t = Math.max(0, -19 - z);
+        if (Math.abs(Math.abs(x) - t * wingTan) < 4.5 + pad) return true;
+      }
+      return false;
+    }
+
+    // trees, kept off the house and the drives
+    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x5b3a1e, roughness: 0.9 });
+    const leafMat = new THREE.MeshStandardMaterial({ color: 0x2f6b2f, roughness: 0.9 });
+    let seed = 7;
+    const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let n = 0, tries = 0; n < 70 && tries < 2000; tries++) {
+      const tx = -120 + rand() * 260, tz = -230 + rand() * 330;
+      if (inHouse(tx, tz, 8)) continue;
+      if (Math.abs(tx) < 7 && tz > 14 && tz < 62) continue;
+      if (Math.abs(tx - 74) < 7 && tz > -16 && tz < 62) continue;
+      if (Math.abs(tz - 60) < 6 && tx > -6 && tx < 78) continue;
+      const h = 4 + rand() * 4;
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.45, h, 8), trunkMat);
+      trunk.position.set(tx, h / 2, tz); scene.add(trunk);
+      const crown = new THREE.Mesh(new THREE.ConeGeometry(2 + rand() * 1.5, h * 1.1, 10), leafMat);
+      crown.position.set(tx, h + h * 0.45, tz); scene.add(crown);
+      addRound(tx, tz, 0.45, 0.45, 0, h);
+      n++;
+    }
+
+    // a low stone wall round the grounds so you can't walk off the world
+    const stoneMat = new THREE.MeshStandardMaterial({ color: 0x77736b, roughness: 1 });
+    createWall(10, 0.6, 100, 280, 1.2, 0.8, stoneMat);
+    createWall(10, 0.6, -240, 280, 1.2, 0.8, stoneMat);
+    createWall(-130, 0.6, -70, 0.8, 1.2, 340, stoneMat);
+    createWall(150, 0.6, -70, 0.8, 1.2, 340, stoneMat);
+
+    const skyIn = new THREE.Color(0x1a062e), skyOut = new THREE.Color(0x9cc3e6);
+    scene.background = new THREE.Color(0x9cc3e6);
+
+    // ==========================================
+    // 5. PLAYER CONTROLS & INTERACTION
     // ==========================================
     const keys = {};
+    const speed = 0.12;
 
-    addEventListener("keydown", e => { keys[e.code] = true; });
-    addEventListener("keyup", e => { keys[e.code] = false; });
+    addEventListener("keydown", e => keys[e.code] = true);
+    addEventListener("keyup", e => keys[e.code] = false);
 
-    // Press 'E' to interact
     addEventListener("keydown", e => {
       if (e.code !== "KeyE" || !controls.isLocked) return;
 
-      const target = getNearestInteractiveObject();
-      if (target) {
-        if (target.userData.type === "modal") {
+      const nearest = getNearestDoor();
+      if (nearest) {
+        if (nearest.userData.isModal) {
           controls.unlock();
-          openModal(target.userData.modalId);
-        } else if (target.userData.type === "link") {
-          window.open(target.userData.url, "_blank");
-        } else if (target.userData.type === "info") {
-          alert(target.userData.infoText);
+          window.openModal(nearest.userData.modalId);
+        } else if (nearest.userData.targetUrl) {
+          window.location.href = nearest.userData.targetUrl;
         }
       }
     });
 
-    function getNearestInteractiveObject() {
+    function getNearestDoor() {
       let closest = null;
       let minDistance = 3.5;
       const camPos = camera.position;
 
-      for (let obj of interactiveObjects) {
+      interactiveDoors.forEach(d => {
         const pos = new THREE.Vector3();
-        obj.getWorldPosition(pos);
+        d.getWorldPosition(pos);
         const dist = camPos.distanceTo(pos);
         if (dist < minDistance) {
           minDistance = dist;
-          closest = obj;
+          closest = d;
         }
-      }
+      });
       return closest;
     }
 
-    function checkInteractionPrompt() {
+    function checkInteraction() {
       if (!controls.isLocked) {
         promptEl.style.display = "none";
         return;
       }
-
-      const target = getNearestInteractiveObject();
-      if (target) {
+      const nearest = getNearestDoor();
+      if (nearest) {
         promptEl.style.display = "block";
-        promptTextEl.textContent = `Interact with ${target.userData.name}`;
+        promptTextEl.textContent = `Interact with ${nearest.userData.name}`;
       } else {
         promptEl.style.display = "none";
       }
     }
 
-    // Floor state: mansion upper level vs underground club (stacked footprints)
-    const playerRadius = 0.4;
-    let level = "upper";
-    let onStairs = false;
-
-    function isWalkable(x, z) {
-      const r = playerRadius;
-      // Stair shaft + apron: |x| <= 2, z in [-14, 1.5] — confined while latched
-      if (onStairs) return Math.abs(x) <= 2 - r && z <= 1.6 && z >= -14.6;
-      if (level === "upper") {
-        // The stairwell opening is a hole unless you're on the stairs
-        if (Math.abs(x) <= 2 && z <= 0.5 && z >= -1.5) return false;
-        const inFoyer = Math.abs(x) <= 12 - r && z >= -12 + r && z <= 12 - r;
-        const inHallway = Math.abs(x) <= 4 - r && z >= -51.8 + r && z <= -11;
-        return inFoyer || inHallway;
+    const PLAYER_R = 0.4;
+    function blocked(px, pz) {
+      const feet = camera.position.y - 1.7;
+      for (const b of solids) {
+        if (!b.on || b.y1 < feet + 0.3 || b.y0 > feet + 1.8) continue;
+        const dx = px - b.x, dz = pz - b.z;
+        if (b.round) {
+          if ((dx / (b.rx + PLAYER_R)) ** 2 + (dz / (b.rz + PLAYER_R)) ** 2 < 1) return true;
+          continue;
+        }
+        const lx = dx * b.c - dz * b.s, lz = dx * b.s + dz * b.c;
+        const cx = Math.max(-b.hw, Math.min(b.hw, lx)), cz = Math.max(-b.hd, Math.min(b.hd, lz));
+        if ((lx - cx) ** 2 + (lz - cz) ** 2 < PLAYER_R * PLAYER_R) return true;
       }
-      return Math.abs(x) <= 20 - r && z >= -50 + r && z <= -10.2 - r;
+      return false;
     }
 
-    function movePlayer() {
+    function move() {
       if (!controls.isLocked) return;
 
-      const prevX = camera.position.x;
-      const prevZ = camera.position.z;
+      const ox = camera.position.x, oz = camera.position.z;
+      if (keys["KeyW"]) controls.moveForward(speed);
+      if (keys["KeyS"]) controls.moveForward(-speed);
+      if (keys["KeyA"]) controls.moveRight(-speed);
+      if (keys["KeyD"]) controls.moveRight(speed);
 
-      if (keys["KeyW"] || keys["ArrowUp"]) controls.moveForward(playerSpeed);
-      if (keys["KeyS"] || keys["ArrowDown"]) controls.moveForward(-playerSpeed);
-      if (keys["KeyA"] || keys["ArrowLeft"]) controls.moveRight(-playerSpeed);
-      if (keys["KeyD"] || keys["ArrowRight"]) controls.moveRight(playerSpeed);
-
-      // Wall collision — resolve per axis so movement slides along walls
-      if (!isWalkable(camera.position.x, prevZ)) camera.position.x = prevX;
-      if (!isWalkable(camera.position.x, camera.position.z)) camera.position.z = prevZ;
+      // walls: slide along them instead of passing through
+      const nx = camera.position.x, nz = camera.position.z;
+      if (blocked(nx, nz) && !blocked(ox, oz)) {   // already stuck inside something: let them walk out
+        if (!blocked(nx, oz)) camera.position.set(nx, camera.position.y, oz);
+        else if (!blocked(ox, nz)) camera.position.set(ox, camera.position.y, nz);
+        else camera.position.set(ox, camera.position.y, oz);
+      }
 
       const x = camera.position.x;
       const z = camera.position.z;
 
-      // Stair shaft latching & floor transitions. Latch on approaching the
-      // stairwell mouth heading down; the floor opening blocks everyone else.
-      const inShaft = Math.abs(x) <= 2 && z <= 1.5 && z >= -14;
-      if (level === "upper") {
-        if (!onStairs && inShaft && z > -0.5 && z < prevZ) onStairs = true;
-        else if (onStairs && z <= -14) { level = "club"; onStairs = false; }
-        else if (onStairs && !inShaft) onStairs = false;
-      } else {
-        if (!onStairs && inShaft) onStairs = true;
-        else if (onStairs && z >= 0.6) { level = "upper"; onStairs = false; }
-        else if (onStairs && !inShaft) onStairs = false;
-      }
-
-      // Camera height: interpolate on stairs, flat per level otherwise
-      if (onStairs) {
-        const progress = THREE.MathUtils.clamp(-z / 14, 0, 1);
+      // Handle multi-level height (Foyer ground 1.7, Balcony 8.7, Underground Club -6.3)
+      if (Math.abs(x) > 14.5 || z > 14.6) {
+        camera.position.y = 1.7; // Hallway, garages, outdoors
+      } else if (x > 8 && z > 0 && z < 13) {
+        const balconyProgress = z / 12.5;
+        camera.position.y = THREE.MathUtils.lerp(1.7, 8.7, balconyProgress);
+      } else if (z > 0 && z < 12 && Math.abs(x) < 14 && camera.position.y > 5.0) {
+        camera.position.y = 8.7; // Walking on 2nd floor balcony
+      } else if (z < 0 && z > -15 && Math.abs(x) < 3) {
+        const progress = Math.abs(z) / 15;
         camera.position.y = THREE.MathUtils.lerp(1.7, clubY + 1.7, progress);
+      } else if (z <= -15 && z > -50 && Math.abs(x) < 20 && camera.position.y < -3) {
+        camera.position.y = clubY + 1.7; // Underground Club
       } else {
-        camera.position.y = level === "club" ? clubY + 1.7 : 1.7;
+        camera.position.y = 1.7; // Ground level
       }
     }
 
-    // Animation Loop
     function animate() {
       requestAnimationFrame(animate);
-
-      movePlayer();
-      checkInteractionPrompt();
-
-      // Animate purple smoke particles
+      move();
       smokeParticles.forEach((p, idx) => {
         p.position.y += Math.sin(Date.now() * 0.001 + idx) * 0.003;
         p.rotation.y += 0.005;
       });
-
-      // Pulse dance floor lighting
       danceFloorMat.emissiveIntensity = 0.6 + Math.sin(Date.now() * 0.005) * 0.4;
-
+      const dt = doorClock.getDelta();
+      if (!garageDoors.open && camera.position.x > 39.5 && Math.abs(camera.position.z - HZ) < 2.8) { garageDoors.open = 0.001; garageDoors.solid.on = false; }
+      if (garageDoors.open && garageDoors.open < 1) {
+        garageDoors.open = Math.min(1, garageDoors.open + dt * 0.7);
+        const a = (1 - Math.pow(1 - garageDoors.open, 3)) * Math.PI / 2;
+        garageDoors.left.rotation.y = a;
+        garageDoors.right.rotation.y = -a;
+      }
+      const px = camera.position.x, pz = camera.position.z;
+      if (!frontDoor.open && Math.abs(px) < 3 && Math.abs(pz - 14.8) < 2.2) { frontDoor.open = 0.001; frontDoor.solid.on = false; }
+      if (frontDoor.open && frontDoor.open < 1) {
+        frontDoor.open = Math.min(1, frontDoor.open + dt * 0.7);
+        frontDoor.hinge.rotation.y = -(1 - Math.pow(1 - frontDoor.open, 3)) * Math.PI / 2;
+      }
+      if (!roll.open && Math.abs(px - 68.8) < 5 && Math.abs(pz - HZ) < 4) { roll.open = 0.001; roll.solid.on = false; }
+      if (roll.open && roll.open < 1) {
+        roll.open = Math.min(1, roll.open + dt * 0.5);
+        roll.group.position.y = roll.open * 4.4;
+      }
+      // haze: the club's purple smoke indoors, clear daylight outside
+      const outside = !inHouse(px, pz) && camera.position.y > 0;
+      scene.fog.color.lerp(outside ? skyOut : skyIn, 0.05);
+      scene.fog.density += ((outside ? 0.003 : fogIndoor) - scene.fog.density) * 0.05;
+      checkInteraction();
       renderer.render(scene, camera);
     }
 
@@ -1052,48 +1220,12 @@ console.log(PuffBaseClub.getStatus());</div>
 
     animate();
 
-    // Global Window Helpers for Modals & Settings
-    window.openModal = function(id) {
-      document.getElementById(id).style.display = "grid";
-    };
-
-    window.closeModal = function(id) {
-      document.getElementById(id).style.display = "none";
-      controls.lock();
-    };
-
-    window.loginKeycloak = function() {
-      const user = document.getElementById("keycloak-user").value;
-      alert(`Keycloak SSO Authentication Successful! Welcome agent: ${user}`);
-      closeModal("modal-keycloak");
-    };
-
-    window.copyRepoUrl = function(url) {
-      navigator.clipboard.writeText(url);
-      alert(`Copied URL to Clipboard:\n${url}`);
-    };
-
-    window.runEditorCode = function() {
-      const statusEl = document.getElementById("editor-status");
-      statusEl.textContent = "Status: Executed successfully! (Check Browser Console)";
-      console.log("%c[PuffBase Dance Floor Editor] Code Executed!", "color: #22c55e; font-weight: bold; font-size: 14px;");
-    };
-
-    window.updateAudioVolume = function(val) {
-      console.log(`Audio volume set to: ${val}%`);
-    };
-
-    window.updateSmokeDensity = function(val) {
-      scene.fog.density = 0.01 + (val / 100) * 0.05;
-    };
-
-    window.updateSlimeGlow = function(val) {
-      slimeMat.emissiveIntensity = 0.2 + (val / 100) * 1.2;
-    };
-
-    window.updateMoveSpeed = function(val) {
-      playerSpeed = 0.05 + (val / 100) * 0.2;
-    };
+    window.openModal = id => document.getElementById(id).style.display = "grid";
+    window.closeModal = id => { document.getElementById(id).style.display = "none"; controls.lock(); };
+    window.loginKeycloak = () => { alert("Authenticated via Keycloak!"); window.closeModal("modal-keycloak"); };
+    window.copyRepoUrl = url => { navigator.clipboard.writeText(url); alert(`Copied:\n${url}`); };
+    window.updateSmokeDensity = val => fogIndoor = 0.005 + (val / 100) * 0.03;
+    window.updateSlimeGlow = val => slimeMat.emissiveIntensity = 0.2 + (val / 100) * 1.2;
   </script>
 </body>
 </html>
